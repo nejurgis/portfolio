@@ -1,7 +1,9 @@
 {
+  "extends": ["react-app","plugin:prettier/recommended"],
   "endOfLine": "lf",
   "semi": false,
   "singleQuote": false,
   "tabWidth": 2,
-  "trailingComma": "es5"
+  "trailingComma": "es5",
+  "semicolons": "false"
 }
