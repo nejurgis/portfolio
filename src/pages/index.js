@@ -58,6 +58,11 @@ const IndexPage = () => (
           here. I'm a Graphic Designer who does Web Development.
         </h1>
       </Text>
+      <ul id="messages" />
+      <form action="">
+        <input id="m" />
+        <button>Send</button>
+      </form>
       <CanvasComponent />
     </Container>
     {/* </Layout> */}
