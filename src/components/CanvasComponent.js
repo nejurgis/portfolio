@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
-import hoverData from "./db.json"
 import io from "socket.io-client"
 
-const url = "https://jurgioserveris.herokuapp.com/"
+// const url = "https://jurgioserveris.herokuapp.com/"
+const url = "localhost:3000"
 const socket = io.connect(url)
 
 let frame
@@ -17,7 +17,6 @@ const itemStyle = {
   WebkitBackfaceVisibility: "hidden",
   BackfaceVisibility: "hidden",
   verticalAlign: "bottom",
-  // overflowX: "hidden",
   pointerEvents: "none",
 }
 
@@ -36,7 +35,6 @@ export default class CanvasComponent extends Component {
       r: 25,
       r2: 15,
       maxlength: 250,
-      coords: [],
     }
   }
 
@@ -49,17 +47,11 @@ export default class CanvasComponent extends Component {
       window.webkitRequestAnimationFrame ||
       window.msRequestAnimationFrame
     this.canvas = this.canvasRef.current
-    // this.canvas.width = window.innerWidth * 2
-    // this.canvas.height = window.innerHeight * 2
-    // this.canvas.style.width = window.innerWidth + "px"
-    // this.canvas.style.height = window.innerHeight + "px"
-    // const ctx = this.canvas.getContext("2d")
-    // ctx.scale(2, 2)
 
     this.heatmap = simpleheat(this.canvas).max(20)
     this.heatmap.gradient(this.state.col)
     this.heatmap.radius(this.state.r, this.state.r2)
-    this.heatmap.clear()
+    // this.heatmap.clear()
     document.body.addEventListener("mousemove", this.collectMouseData)
 
     socket.emit("load history")
@@ -74,23 +66,12 @@ export default class CanvasComponent extends Component {
       window.requestAnimationFrame(this.draw)
     })
     socket.on("livestream", coordinate => {
-      // console.log("coordinate:", coordinate)
       this.heatmap.add(coordinate)
-      // this.setState({
-      //   data: [...this.state.data, coordinate],
-      // })
-      // this.state.data
-      // console.log("this.state.data:", this.state.data)
-      // this.heatmap.draw()
+
       if (this.heatmap._data.length > this.state.maxlength) {
         this.heatmap._data.shift()
-
-        // this.heatmap.clear()
       }
       window.requestAnimationFrame(this.draw)
-      // this.heatmap._data.push(coords.slice(-1)[0])
-      // console.log("this.heatmap:", this.heatmap)
-      // console.log("received livestream")
     })
 
     // WINDOW RESIZE QUEST BEGINS HERE
@@ -98,7 +79,7 @@ export default class CanvasComponent extends Component {
     this.resizeCanvasToDisplaySize(this.canvas)
     window.addEventListener(
       "resize",
-      // this.resizeCanvasToDisplaySize(this.canvas)
+
       () => {
         this.resizeCanvasToDisplaySize(this.canvas)
       }
@@ -111,23 +92,21 @@ export default class CanvasComponent extends Component {
   }
 
   draw = () => {
-    // console.time('draw')
     this.heatmap.draw()
-    // console.timeEnd('draw')
-
     frame = null
   }
 
   resizeCanvasToDisplaySize = canvas => {
     let width = canvas.clientWidth
     let height = canvas.clientHeight
-    console.log("ran inside resizeCanvasToDisplaySize")
-    console.log("client height:", height)
-    console.log("canvas height", canvas.height)
 
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width
       canvas.height = height
+      this.heatmap = simpleheat(canvas).max(20)
+      this.heatmap.gradient(this.state.col)
+      this.heatmap.radius(this.state.r, this.state.r2)
+
       return true
     }
     console.log("in the false zone")
@@ -138,26 +117,8 @@ export default class CanvasComponent extends Component {
     e.preventDefault()
     let x = e.offsetX
     let y = e.offsetY
-    // console.log("y:", y)
 
-    // if (e.touches) {
-    //   console.log("e.touches:", e.touches)
-    //   x = e.touches[0].pageX
-    //   y = e.touches[0].pageY
-    // }
-    // this.setState(state => {
-    //   const data = ['h',...state.data ]
-    // })
-    // this.setState({
-    //   data: [
-    //     ...this.state.data,
-    //     [x,y,1]
-    //   ]
-    // })
-    //slow
-    // this.heatmap.add(this.state.data[this.state.data.length-1])
-
-    // this.heatmap.add([x, y, 1])
+    this.heatmap.add([x, y, 1])
     socket.emit("hell", [x, y, 1])
 
     if (this.heatmap._data.length > this.state.maxlength) {
