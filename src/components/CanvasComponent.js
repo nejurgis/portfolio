@@ -35,8 +35,6 @@ export default class CanvasComponent extends Component {
       r: 25,
       r2: 15,
       maxlength: 250,
-      windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight,
     }
   }
 
