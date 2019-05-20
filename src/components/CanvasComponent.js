@@ -3,22 +3,21 @@ import * as simpleheat from "simpleheat"
 import hoverData from "./db.json"
 import io from "socket.io-client"
 
-const url = "http://localhost:3001"
+const url = "https://jurgioserveris.herokuapp.com/"
 const socket = io.connect(url)
 
-let so = io()
 let frame
 const itemStyle = {
   // MAKES THE CANVAS ON TOP OF STUFF
   position: "absolute",
-  // display: 'none'
-  // pointerEvents: 'none'
+  width: "100vw",
+  height: "100vh",
   WebkitTransform: "translateZ(0)",
   transform: "translateZ(0)",
   WebkitBackfaceVisibility: "hidden",
   BackfaceVisibility: "hidden",
   verticalAlign: "bottom",
-  overflowX: "hidden",
+  // overflowX: "hidden",
   pointerEvents: "none",
 }
 
@@ -36,7 +35,7 @@ export default class CanvasComponent extends Component {
       },
       r: 25,
       r2: 15,
-      maxlength: 1500,
+      maxlength: 250,
       coords: [],
     }
   }
@@ -44,7 +43,6 @@ export default class CanvasComponent extends Component {
   canvasRef = React.createRef()
 
   componentDidMount() {
-    console.log(hoverData[0])
     window.requestAnimationFrame =
       window.requestAnimationFrame ||
       window.mozRequestAnimationFrame ||
@@ -58,36 +56,58 @@ export default class CanvasComponent extends Component {
     // const ctx = this.canvas.getContext("2d")
     // ctx.scale(2, 2)
 
-    // console.log("CANVAS", this.canvasRef)
-
     this.heatmap = simpleheat(this.canvas).max(20)
     this.heatmap.gradient(this.state.col)
     this.heatmap.radius(this.state.r, this.state.r2)
     this.heatmap.clear()
     document.body.addEventListener("mousemove", this.collectMouseData)
-    // console.log("this.heatmap:", document.body)
+
     socket.emit("load history")
     socket.on("here you go", history => {
-      console.log("got it thanks", history[0])
+      // console.log("got it thanks", history[0])
       this.setState({
         data: [...this.state.data, ...history],
       })
       this.state.data.forEach(el => {
         this.heatmap.add(el)
       })
-      this.heatmap.draw()
+      window.requestAnimationFrame(this.draw)
     })
-    socket.on("livestream", coords => {
-      console.log("coords:", coords.length)
-
-      // coords.forEach(coordinate => {
-      //   console.log("coordinate:", coordinate)
-
-      //   // this.heatmap.add(coordinate)
+    socket.on("livestream", coordinate => {
+      // console.log("coordinate:", coordinate)
+      this.heatmap.add(coordinate)
+      // this.setState({
+      //   data: [...this.state.data, coordinate],
       // })
+      // this.state.data
+      // console.log("this.state.data:", this.state.data)
       // this.heatmap.draw()
-      console.log("received livestream")
+      if (this.heatmap._data.length > this.state.maxlength) {
+        this.heatmap._data.shift()
+
+        // this.heatmap.clear()
+      }
+      window.requestAnimationFrame(this.draw)
+      // this.heatmap._data.push(coords.slice(-1)[0])
+      // console.log("this.heatmap:", this.heatmap)
+      // console.log("received livestream")
     })
+
+    // WINDOW RESIZE QUEST BEGINS HERE
+    // solution from here : https://www.hawatel.com/blog/handle-window-resize-in-react/
+    this.resizeCanvasToDisplaySize(this.canvas)
+    window.addEventListener(
+      "resize",
+      // this.resizeCanvasToDisplaySize(this.canvas)
+      () => {
+        this.resizeCanvasToDisplaySize(this.canvas)
+      }
+    )
+
+    let newWidth = window.innerWidth
+    console.log("newWidth:", newWidth)
+
+    console.log("this.canvas:", this.canvas)
   }
 
   draw = () => {
@@ -96,6 +116,22 @@ export default class CanvasComponent extends Component {
     // console.timeEnd('draw')
 
     frame = null
+  }
+
+  resizeCanvasToDisplaySize = canvas => {
+    let width = canvas.clientWidth
+    let height = canvas.clientHeight
+    console.log("ran inside resizeCanvasToDisplaySize")
+    console.log("client height:", height)
+    console.log("canvas height", canvas.height)
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width
+      canvas.height = height
+      return true
+    }
+    console.log("in the false zone")
+    return false
   }
 
   collectMouseData = e => {
@@ -121,7 +157,7 @@ export default class CanvasComponent extends Component {
     //slow
     // this.heatmap.add(this.state.data[this.state.data.length-1])
 
-    this.heatmap.add([x, y, 1])
+    // this.heatmap.add([x, y, 1])
     socket.emit("hell", [x, y, 1])
 
     if (this.heatmap._data.length > this.state.maxlength) {
