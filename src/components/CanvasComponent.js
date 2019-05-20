@@ -35,6 +35,8 @@ export default class CanvasComponent extends Component {
       r: 25,
       r2: 15,
       maxlength: 250,
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
     }
   }
 
@@ -129,13 +131,15 @@ export default class CanvasComponent extends Component {
   }
 
   render() {
-    return (
-      <canvas
-        style={itemStyle}
-        ref={this.canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      />
-    )
+    if (typeof window !== `undefined`) {
+      return (
+        <canvas
+          style={itemStyle}
+          ref={this.canvasRef}
+          width={window.innerWidth}
+          height={window.innerHeight}
+        />
+      )
+    }
   }
 }
