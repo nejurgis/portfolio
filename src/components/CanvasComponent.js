@@ -138,6 +138,8 @@ export default class CanvasComponent extends Component {
           height={window.innerHeight}
         />
       )
+    } else {
+      return <canvas />
     }
   }
 }
