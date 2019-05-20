@@ -84,11 +84,6 @@ export default class CanvasComponent extends Component {
         this.resizeCanvasToDisplaySize(this.canvas)
       }
     )
-
-    let newWidth = window.innerWidth
-    console.log("newWidth:", newWidth)
-
-    console.log("this.canvas:", this.canvas)
   }
 
   draw = () => {
