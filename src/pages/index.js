@@ -67,17 +67,18 @@ const IndexPage = () => (
     <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
     
     {/* <Container> */}
+    <DungeonComponent />
       <Text>
         <h1>
           Hey,
           <Clickable> </Clickable>
-          <NavLink to="/">Jurgis</NavLink>
-          here. I'm a Graphic Designer who does Web Development.
+          {/* <NavLink to="/">Jurgis</NavLink> */}
+          {/* here. I'm a Graphic Designer who does Web Development. */}
         </h1>
       </Text>
 
-      {/* <CanvasComponent /> */}
-      <DungeonComponent />
+      <CanvasComponent />
+      
     {/* </Container> */}
     {/* </Layout> */}
   </>
