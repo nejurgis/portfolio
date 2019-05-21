@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
 
-const url = "https://jurgioserveris.herokuapp.com/"
-// const url = "localhost:3000"
+// const url = "https://jurgioserveris.herokuapp.com/"
+const url = "localhost:3000"
 const socket = io.connect(url)
 
 let frame
@@ -67,6 +67,25 @@ export default class CanvasComponent extends Component {
     })
     socket.on("livestream", coordinate => {
       this.heatmap.add(coordinate)
+      console.log("heatmap data length:", this.heatmap._data.length)
+
+      if (this.heatmap._data.length > 5000) {
+        // this.heatmap._data.splice(0, 4500)
+        this.heatmap.clear()
+        // window.requestAnimationFrame(this.draw)
+
+        console.log(
+          "Went here and deleted  5000 elements:",
+          this.heatmap._data.length
+        )
+      } else if (this.heatmap._data.length >= 700) {
+        this.heatmap._data.splice(0, 500)
+        window.requestAnimationFrame(this.draw)
+        console.log(
+          "Went here and deleted  500 elements:",
+          this.heatmap._data.length
+        )
+      }
 
       if (this.heatmap._data.length > this.state.maxlength) {
         this.heatmap._data.shift()
