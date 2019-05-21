@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
 
-// const url = "https://jurgioserveris.herokuapp.com/"
-const url = "localhost:3000"
+const url = "https://jurgioserveris.herokuapp.com/"
+// const url = "localhost:3000"
 const socket = io.connect(url)
 
 let frame

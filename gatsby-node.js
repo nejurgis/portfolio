@@ -13,3 +13,13 @@ exports.onPostBuild = () => {
     "ps aux | grep jest | grep -v grep | awk '{print $2}' | xargs kill"
   )
 }
+
+exports.onCreateWebpackConfig = ({ getConfig, stage }) => {
+  const config = getConfig()
+  if (stage.startsWith("develop") && config.resolve) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "react-dom": "@hot-loader/react-dom",
+    }
+  }
+}
