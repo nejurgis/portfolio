@@ -65,8 +65,8 @@ const IndexPage = () => (
   <>
     {/* <Layout> */}
     <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-    <DungeonComponent />
-    <Container>
+    
+    {/* <Container> */}
       <Text>
         <h1>
           Hey,
@@ -76,8 +76,9 @@ const IndexPage = () => (
         </h1>
       </Text>
 
-      <CanvasComponent />
-    </Container>
+      {/* <CanvasComponent /> */}
+      <DungeonComponent />
+    {/* </Container> */}
     {/* </Layout> */}
   </>
 )

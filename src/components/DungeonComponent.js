@@ -1,30 +1,30 @@
 import React from "react"
 import * as THREE from "three"
-// import debounce from 'lodash/debounce'
-import DeviceOrientationController from "../lib/DeviceOrientationController"
-import sphereGeometry from "../assets/peels_d25.json"
+import debounce from "lodash/debounce"
+import sphereGeometry from "../assets/peels_d27.json"
 
-// import { withStyles } from "@material-ui/core"
+import { withStyles } from "@material-ui/core"
 
-const canvasStyle = {
-  opacity: "0.3",
-  position: "fixed",
-  top: "0",
-  bottom: "0",
-  left: "0",
-  right: "0",
-  zIndex: "-1",
-  height: "100% !important",
-  width: "100% !important",
+const styles = {
+  animationRoot: {
+    opacity: 0.2,
+    position: "fixed",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    height: [["100%"], "!important"],
+    width: [["100%"], "!important"],
+  },
 }
 
-let playing = false
-let renderer, scene, camera, planet, controls
+let renderer, scene, camera, planet
 
 const initScene = function() {
   scene = new THREE.Scene()
 
-  camera = new THREE.PerspectiveCamera(111, 1, 0.1, 100)
+  camera = new THREE.PerspectiveCamera(100, 1, 0.1, 100)
 
   const planetGeometry = new THREE.BufferGeometry()
 
@@ -36,7 +36,7 @@ const initScene = function() {
   )
 
   planetGeometry.addAttribute(
-    "position",
+    'position',
     new THREE.BufferAttribute(
       Float32Array.from(sphereGeometry.data.attributes.position.array),
       3
@@ -52,12 +52,49 @@ const initScene = function() {
 
   scene.add(planet)
 
-  controls = new DeviceOrientationController(camera, renderer.domElement)
-  controls.connect({ pan: false })
+  // planetGeometry.setIndex(
+  //   new THREE.BufferAttribute(
+  //     Uint32Array.from(sphereGeometry.data.index.array),
+  //     1
+  //   )
+  // )
+
+  // planetGeometry.addAttribute(
+  //   "position",
+  //   new THREE.BufferAttribute(
+  //     Float32Array.from(sphereGeometry.data.attributes.position.array),
+  //     3
+  //   )
+  // )
+
+  // planetGeometry.addAttribute(
+  //   "positionm",
+  //   new THREE.BufferAttribute(
+  //     Float32Array.from(sphereGeometry.data.attributes.normal.array),
+  //     3
+  //   )
+  // )
+
+  // planetGeometry.addAttribute(
+  //   "color",
+  //   new THREE.BufferAttribute(
+  //     Float32Array.from(sphereGeometry.data.attributes.color.array),
+  //     3
+  //   )
+  // )
+
+  // planet = new THREE.Mesh(
+  //   planetGeometry,
+  //   new THREE.MeshBasicMaterial({
+  //     vertexColors: THREE.VertexColors,
+  //     wireframe: true,
+  //   })
+  // )
+
+  // scene.add(planet)
 }
 
 export function setRenderer({ canvas }) {
-  // console.log(canvas)
   renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
@@ -72,9 +109,10 @@ export function onResize({ width, height }) {
   if (renderer) renderer.setSize(width, height)
 }
 
+let playing = false
+
 function onRender() {
   planet.rotation.x += 2.5e-4
-  controls.update()
   renderer.render(scene, camera)
 }
 
@@ -96,15 +134,14 @@ class DungeonComponent extends React.Component {
   constructor(props) {
     super(props)
     this.animationRoot = React.createRef()
-    this.onResize = this._onResize
-    // this.onResize = debounce(this._onResize, 200).bind(this)
+    this.onResize = debounce(this._onResize, 500).bind(this)
   }
 
   playIntroAnimation() {
     play()
   }
 
-  _onResize = () => {
+  _onResize() {
     const depth = window.devicePixelRatio
     const dims = this.animationRoot.current.getBoundingClientRect()
     const width = dims.width * depth
@@ -113,12 +150,7 @@ class DungeonComponent extends React.Component {
   }
 
   componentDidMount() {
-    console.log(
-      " canvas this.animationRoot.current:",
-      this.animationRoot.current
-    )
     setRenderer({ canvas: this.animationRoot.current })
-
     initScene()
     window.addEventListener("resize", this.onResize)
     this._onResize()
@@ -126,14 +158,10 @@ class DungeonComponent extends React.Component {
   }
 
   render() {
-    return (
-      <canvas
-        style={{ width: "100%", height: "100%" }}
-        ref={this.animationRoot}
-      />
-    )
+    const { classes } = this.props
+
+    return <canvas ref={this.animationRoot} className={classes.animationRoot} />
   }
 }
 
-export default DungeonComponent
-// export default withStyles(styles)(IntroScene)
+export default withStyles(styles)(DungeonComponent)
