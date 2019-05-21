@@ -1,10 +1,10 @@
 import React from "react"
 import { Link } from "gatsby"
+import Loadable from "react-loadable"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
-import Projects from "../components/projects"
 import Menu from "../components/menu"
 import CanvasComponent from "../components/CanvasComponent"
 import "../components/layout.css"
@@ -44,11 +44,28 @@ const Clickable = styled.div`
   z-index: 4;
   display: inline;
 `
+const DungeonLoading = props => {
+  if (props.error) {
+    return null
+  } else if (props.timedOut) {
+    return null
+  } else if (props.pastDelay) {
+    return null
+  } else {
+    return null
+  }
+}
+
+const DungeonComponent = Loadable({
+  loader: () => import("../components/DungeonComponent"),
+  loading: DungeonLoading,
+})
 
 const IndexPage = () => (
   <>
     {/* <Layout> */}
     <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
+    <DungeonComponent />
     <Container>
       <Text>
         <h1>
