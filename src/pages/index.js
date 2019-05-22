@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import Loadable from "react-loadable"
 
 import SEO from "../components/seo"
-import CanvasComponent from "../components/CanvasComponent"
+// import CanvasComponent from "../components/CanvasComponent"
 import "../components/layout.css"
 import styled from "@emotion/styled"
 
@@ -57,6 +57,11 @@ const DungeonComponent = Loadable({
   loading: DungeonLoading,
 })
 
+const CanvasComponent = Loadable({
+  loader: () => import("../components/CanvasComponent"),
+  loading: DungeonLoading,
+})
+
 export default class IndexPage extends Component {
   state = {
     width: "",
@@ -81,10 +86,10 @@ export default class IndexPage extends Component {
   }
 
   handleWindowSizeChange = () => {
-    console.log("pixel ratio", window.devicePixelRatio)
-    console.log("state of screen", this.state.mode)
+    // console.log("pixel ratio", window.devicePixelRatio)
+    // console.log("state of screen", this.state.mode)
     this.setState({ width: window.innerWidth })
-    console.log("window width", this.state.width)
+    // console.log("window width", this.state.width)
 
     if (this.state.width <= 600) {
       this.setState({ mode: "mobile" })
