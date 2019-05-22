@@ -111,14 +111,14 @@ class IntroScene extends React.Component {
     // const width = dims.width * depth
     // const height = dims.height * depth
     // onResize({ width, height })
-    console.log("this.animationRoot.current:", this.animationRoot.current)
+    // console.log("this.animationRoot.current:", this.animationRoot.current)
     if (this.animationRoot.current !== null) {
       const dims = this.animationRoot.current.getBoundingClientRect()
       const width = dims.width * depth
       const height = dims.height * depth
       onResize({ width, height })
     } else {
-      console.log("this.animationRoot.current.getBoundingClientRect() is null")
+      console.log("animation root is null")
     }
   }
 
@@ -128,6 +128,11 @@ class IntroScene extends React.Component {
     window.addEventListener("resize", this.onResize)
     this._onResize()
     this.playIntroAnimation()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize)
+    console.log("component Unmount was called in the dungeons")
   }
 
   render() {
