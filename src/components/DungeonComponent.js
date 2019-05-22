@@ -1,22 +1,22 @@
-import React from 'react'
-import * as THREE from 'three'
-import debounce from 'lodash/debounce'
-import DeviceOrientationController from '../lib/DeviceOrientationController'
-import sphereGeometry from '../assets/peels_d25.json'
+import React from "react"
+import * as THREE from "three"
+import debounce from "lodash/debounce"
+import DeviceOrientationController from "../lib/DeviceOrientationController"
+import sphereGeometry from "../assets/peels_d25.json"
 
-import { withStyles } from '@material-ui/core'
+import { withStyles } from "@material-ui/core"
 
 const styles = {
   animationRoot: {
     opacity: 0.3,
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
     zIndex: -1,
-    height: [['100%'], '!important'],
-    width: [['100%'], '!important'],
+    height: [["100%"], "!important"],
+    width: [["100%"], "!important"],
   },
 }
 
@@ -38,7 +38,7 @@ const initScene = function() {
   )
 
   planetGeometry.addAttribute(
-    'position',
+    "position",
     new THREE.BufferAttribute(
       Float32Array.from(sphereGeometry.data.attributes.position.array),
       3
@@ -106,16 +106,26 @@ class IntroScene extends React.Component {
 
   _onResize() {
     const depth = window.devicePixelRatio
-    const dims = this.animationRoot.current.getBoundingClientRect()
-    const width = dims.width * depth
-    const height = dims.height * depth
-    onResize({ width, height })
+
+    // const dims = this.animationRoot.current.getBoundingClientRect()
+    // const width = dims.width * depth
+    // const height = dims.height * depth
+    // onResize({ width, height })
+    console.log("this.animationRoot.current:", this.animationRoot.current)
+    if (this.animationRoot.current !== null) {
+      const dims = this.animationRoot.current.getBoundingClientRect()
+      const width = dims.width * depth
+      const height = dims.height * depth
+      onResize({ width, height })
+    } else {
+      console.log("this.animationRoot.current.getBoundingClientRect() is null")
+    }
   }
 
   componentDidMount() {
     setRenderer({ canvas: this.animationRoot.current })
     initScene()
-    window.addEventListener('resize', this.onResize)
+    window.addEventListener("resize", this.onResize)
     this._onResize()
     this.playIntroAnimation()
   }

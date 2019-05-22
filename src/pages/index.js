@@ -60,6 +60,7 @@ const DungeonComponent = Loadable({
 export default class IndexPage extends Component {
   state = {
     width: "",
+    mode: "mobile",
   }
 
   componentDidMount() {
@@ -67,6 +68,11 @@ export default class IndexPage extends Component {
 
     if (typeof window !== "undefined") {
       this.setState({ width: window.innerWidth })
+      if (window.innerWidth <= 600) {
+        this.setState({ mode: "mobile" })
+      } else {
+        this.setState({ mode: "desktop" })
+      }
     }
   }
 
@@ -76,24 +82,29 @@ export default class IndexPage extends Component {
 
   handleWindowSizeChange = () => {
     console.log("pixel ratio", window.devicePixelRatio)
+    console.log("state of screen", this.state.mode)
     this.setState({ width: window.innerWidth })
+    console.log("window width", this.state.width)
+
+    if (this.state.width <= 600) {
+      this.setState({ mode: "mobile" })
+    } else {
+      this.setState({ mode: "desktop" })
+    }
   }
 
-  render() {
-    const { width } = this.state
-    const isMobile = width <= 600
-
-    if (isMobile) {
-      return (
-        <>
-          {console.log("mobile")}
-          <DungeonComponent />
-        </>
-      )
+  renderDungeon = () => {
+    if (this.state.mode === "mobile") {
+      return <DungeonComponent />
     } else {
+      return null
+    }
+  }
+
+  renderDesktop = () => {
+    if (this.state.mode === "desktop") {
       return (
         <>
-          {console.log("Desktop")}
           <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
 
           <Container>
@@ -109,6 +120,50 @@ export default class IndexPage extends Component {
           </Container>
         </>
       )
+    } else {
+      return null
     }
   }
+
+  render() {
+    return (
+      <>
+        {this.renderDesktop()}
+        {this.renderDungeon()}
+      </>
+    )
+  }
 }
+
+// render() {
+//   const { width } = this.state
+//   const isMobile = width <= 600
+//   console.log("width", width)
+//   if (isMobile) {
+//     return (
+//       <>
+//         {console.log("mobile")}
+//         <DungeonComponent />
+//       </>
+//     )
+//   } else {
+//     return (
+//       <>
+//         {console.log("Desktop")}
+//         <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
+
+//         <Container>
+//           <CanvasComponent />
+//           <Text>
+//             <h1>
+//               Hey,
+//               <Clickable> </Clickable>
+//               <NavLink to="/">Jurgis</NavLink>
+//               Here. I'm a Graphic Designer who does Web Development.
+//             </h1>
+//           </Text>
+//         </Container>
+//       </>
+//     )
+//   }
+// }
