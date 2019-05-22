@@ -8,7 +8,8 @@ import { withStyles } from "@material-ui/core"
 
 const styles = {
   animationRoot: {
-    opacity: 0.3,
+    background: "linear-gradient(45deg, blue 30%, green 90%)",
+    opacity: 0.8,
     position: "fixed",
     top: 0,
     bottom: 0,
@@ -48,7 +49,7 @@ const initScene = function() {
   planet = new THREE.LineSegments(
     planetGeometry,
     new THREE.LineBasicMaterial({
-      color: 0xa9d6ce,
+      color: 0xa2b5cd,
     })
   )
 

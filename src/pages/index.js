@@ -1,9 +1,8 @@
-import React, { useState, useEffect, Component } from "react"
+import React, { Component } from "react"
 import { Link } from "gatsby"
 import Loadable from "react-loadable"
 
 import SEO from "../components/seo"
-// import CanvasComponent from "../components/CanvasComponent"
 import "../components/layout.css"
 import styled from "@emotion/styled"
 
@@ -100,7 +99,19 @@ export default class IndexPage extends Component {
 
   renderDungeon = () => {
     if (this.state.mode === "mobile") {
-      return <DungeonComponent />
+      return (
+        <>
+          <Text>
+            <h1>
+              Hey,
+              <Clickable> </Clickable>
+              <NavLink to="/">Jurgis</NavLink>
+              Here. I'm a Graphic Designer who does Web Development.
+            </h1>
+          </Text>
+          <DungeonComponent />
+        </>
+      )
     } else {
       return null
     }
@@ -139,36 +150,3 @@ export default class IndexPage extends Component {
     )
   }
 }
-
-// render() {
-//   const { width } = this.state
-//   const isMobile = width <= 600
-//   console.log("width", width)
-//   if (isMobile) {
-//     return (
-//       <>
-//         {console.log("mobile")}
-//         <DungeonComponent />
-//       </>
-//     )
-//   } else {
-//     return (
-//       <>
-//         {console.log("Desktop")}
-//         <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-
-//         <Container>
-//           <CanvasComponent />
-//           <Text>
-//             <h1>
-//               Hey,
-//               <Clickable> </Clickable>
-//               <NavLink to="/">Jurgis</NavLink>
-//               Here. I'm a Graphic Designer who does Web Development.
-//             </h1>
-//           </Text>
-//         </Container>
-//       </>
-//     )
-//   }
-// }
