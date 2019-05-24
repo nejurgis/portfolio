@@ -51,6 +51,23 @@ const DungeonLoading = props => {
   }
 }
 
+const HeaderLoading = props => {
+  if (props.error) {
+    return null
+  } else if (props.timedOut) {
+    return null
+  } else if (props.pastDelay) {
+    return null
+  } else {
+    return null
+  }
+}
+
+const HeaderComponent = Loadable({
+  loader: () => import("../components/ThreeHeader"),
+  loading: HeaderLoading,
+})
+
 const DungeonComponent = Loadable({
   loader: () => import("../components/DungeonComponent"),
   loading: DungeonLoading,
@@ -101,14 +118,15 @@ export default class IndexPage extends Component {
     if (this.state.mode === "mobile") {
       return (
         <>
-          <Text>
-            <h1>
-              Hey,
-              <Clickable> </Clickable>
-              <NavLink to="/">Jurgis</NavLink>
-              Here. I'm a Graphic Designer who does Web Development.
-            </h1>
-          </Text>
+          {/* <Text> */}
+          {/* <h1> */}
+          {/* Hey, */}
+          <Clickable> </Clickable>
+          {/* <NavLink to="/">Jurgis</NavLink>
+              Here. I'm a Graphic Designer who does Web Development. */}
+          {/* </h1> */}
+          {/* </Text> */}
+          {/* <HeaderComponent /> */}
           <DungeonComponent />
         </>
       )
@@ -126,7 +144,8 @@ export default class IndexPage extends Component {
           <Container>
             <CanvasComponent />
             <Text>
-              <h1>
+              <h1 ref={this.selector}>
+                <p id="text" />
                 Hey,
                 <Clickable> </Clickable>
                 <NavLink to="/">Jurgis</NavLink>

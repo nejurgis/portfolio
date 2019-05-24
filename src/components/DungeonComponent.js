@@ -3,7 +3,7 @@ import * as THREE from "three"
 import debounce from "lodash/debounce"
 import DeviceOrientationController from "../lib/DeviceOrientationController"
 import sphereGeometry from "../assets/peels_d25.json"
-
+import ima from "../assets/sc.png"
 import { withStyles } from "@material-ui/core"
 
 const styles = {
@@ -22,14 +22,52 @@ const styles = {
 }
 
 let playing = false
-let renderer, scene, camera, planet, controls
+let renderer, scene, camera, planet, controls, group
 
 const initScene = function() {
+  var curve = new THREE.EllipseCurve(
+    0,
+    0, // ax, aY
+    20,
+    10, // xRadius, yRadius
+    0,
+    2 * Math.PI, // aStartAngle, aEndAngle
+    false, // aClockwise
+    1 // aRotation
+  )
+
+  const loader = new THREE.TextureLoader()
+  const texture = loader.load(ima)
+  var points = curve.getPoints(50)
+  var geometry2 = new THREE.ShapeGeometry().setFromPoints(points)
+
+  var material = new THREE.MeshStandardMaterial({
+    map: texture,
+
+    // colorWrite: false,
+  })
+
+  // Create the final object to add to the scene
+  var ellipse = new THREE.Line(geometry2, material)
+
   scene = new THREE.Scene()
 
   camera = new THREE.PerspectiveCamera(111, 1, 0.1, 100)
 
   const planetGeometry = new THREE.BufferGeometry()
+
+  const subjectGeometry = new THREE.IcosahedronGeometry(10, 1)
+  const subjectMaterial = new THREE.MeshStandardMaterial({
+    color: "#000",
+    transparent: true,
+    side: THREE.DoubleSide,
+  })
+
+  const subjectMesh = new THREE.Mesh(subjectGeometry, subjectMaterial)
+  const subjectWireframe = new THREE.LineSegments(
+    new THREE.EdgesGeometry(subjectGeometry),
+    new THREE.LineBasicMaterial()
+  )
 
   planetGeometry.setIndex(
     new THREE.BufferAttribute(
@@ -53,18 +91,35 @@ const initScene = function() {
     })
   )
 
-  scene.add(planet)
+  var material = new THREE.MeshBasicMaterial({ map: texture })
+  // var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  const geometry = new THREE.PlaneBufferGeometry(1, 1, 1)
+  const mesh = new THREE.Mesh(geometry, material)
+
+  // mesh.on("click", e => {
+  //   console.log("event", e)
+  // })
+  camera.position.z = 0
+  mesh.position.x = 1
+  // mesh.position.y = 1
+  // mesh.position.z = 1
 
   controls = new DeviceOrientationController(camera, renderer.domElement)
+  console.log("renderer.domElement:", mesh.domElement)
   controls.connect({ pan: false })
+
+  scene.add(mesh, planet, ellipse)
 }
 
+function track() {
+  console.log("bam")
+}
 export function setRenderer({ canvas }) {
-  renderer = new THREE.WebGLRenderer({
+  return (renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
     canvas,
-  })
+  }))
 }
 
 export function onResize({ width, height }) {
@@ -100,11 +155,15 @@ class IntroScene extends React.Component {
     this.animationRoot = React.createRef()
     this.onResize = debounce(this._onResize, 200).bind(this)
   }
+  imgEl = React.createRef()
 
   playIntroAnimation() {
     play()
   }
 
+  track() {
+    console.log("bam")
+  }
   _onResize() {
     const depth = window.devicePixelRatio
 
@@ -112,7 +171,7 @@ class IntroScene extends React.Component {
     // const width = dims.width * depth
     // const height = dims.height * depth
     // onResize({ width, height })
-    // console.log("this.animationRoot.current:", this.animationRoot.current)
+
     if (this.animationRoot.current !== null) {
       const dims = this.animationRoot.current.getBoundingClientRect()
       const width = dims.width * depth
