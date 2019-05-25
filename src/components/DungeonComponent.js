@@ -3,8 +3,10 @@ import * as THREE from "three"
 import debounce from "lodash/debounce"
 import DeviceOrientationController from "../lib/DeviceOrientationController"
 import sphereGeometry from "../assets/peels_d25.json"
-import g from "../assets/g.gif"
+import henText from "../assets/henText.png"
 import ima from "../assets/Selected_Poster.png"
+import hen from "../assets/hen.jpg"
+import selText from "../assets/selText.png"
 import { withStyles } from "@material-ui/core"
 
 const styles = {
@@ -23,7 +25,19 @@ const styles = {
 }
 
 let playing = false
-let renderer, scene, camera, planet, controls, mesh, mesh2, orbit, h
+let renderer,
+  scene,
+  camera,
+  planet,
+  controls,
+  mesh,
+  mesh2,
+  mesh3,
+  mesh4,
+  orbit,
+  orbit2,
+  orbit3,
+  orbit4
 
 const initScene = function() {
   scene = new THREE.Scene()
@@ -36,26 +50,62 @@ const initScene = function() {
     console.log("texture.width:", tex.image.height)
     mesh.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
   })
-  const texture2 = loader2.load(g, tex => {
+  const texture2 = loader2.load(henText, tex => {
     tex.needsUpdate = true
+    tex.premultiplyAlpha = false
     mesh2.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
+  })
+  const texture3 = loader2.load(hen, tex => {
+    tex.needsUpdate = true
+    tex.premultiplyAlpha = false
+    mesh3.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
+  })
+  const texture4 = loader2.load(selText, tex => {
+    tex.needsUpdate = true
+    tex.premultiplyAlpha = false
+    mesh4.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
   })
   // MATERIALS
   var material = new THREE.MeshBasicMaterial({ map: texture })
-  var material2 = new THREE.MeshBasicMaterial({ map: texture2 })
+  var material2 = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    map: texture2,
+    transparent: true,
+    alphaTest: 0.05,
+  })
+  var material3 = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    map: texture3,
+    transparent: true,
+    alphaTest: 0.05,
+  })
+  var material4 = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    map: texture4,
+    transparent: true,
+    alphaTest: 0.05,
+  })
   // GEOMETRIES
   const geometry = new THREE.PlaneGeometry(20, 20)
   const geometry2 = new THREE.PlaneGeometry(20, 20)
+  const geometry3 = new THREE.PlaneGeometry(20, 20)
+  const geometry4 = new THREE.PlaneGeometry(20, 20)
   // COMBINING
   mesh = new THREE.Mesh(geometry, material)
   mesh2 = new THREE.Mesh(geometry2, material2)
+  mesh3 = new THREE.Mesh(geometry3, material3)
+  mesh4 = new THREE.Mesh(geometry4, material4)
   // POSITIONS
-  mesh.position.set(10.2, 0, 0)
-  mesh2.position.set(10.2, 0, 0)
+  mesh.position.set(15.2, 0, 0)
+  mesh2.position.set(10.2, 17, 0)
+  mesh3.position.set(10.2, 0, 0)
+  mesh4.position.set(10.2, -10, 0)
 
   // The TRAVEL PATH
-  let geom = new THREE.CircleGeometry(10.2, 100)
+  let geom = new THREE.CircleGeometry(15.2, 100)
   let geom2 = new THREE.CircleGeometry(10.2, 100)
+  let geom3 = new THREE.CircleGeometry(10.2, 100)
+  let geom4 = new THREE.CircleGeometry(10.2, 100)
   // LINE
   let circle = new THREE.Line(
     geom,
@@ -65,16 +115,39 @@ const initScene = function() {
     geom2,
     new THREE.LineDashedMaterial({ color: "aqua" })
   )
+  let circle3 = new THREE.Line(
+    geom3,
+    new THREE.LineDashedMaterial({ color: "aqua" })
+  )
+  let circle4 = new THREE.Line(
+    geom4,
+    new THREE.LineDashedMaterial({ color: "aqua" })
+  )
   circle2.rotation.x = Math.PI * 5.5
 
   orbit = new THREE.Group()
+  orbit2 = new THREE.Group()
+  orbit3 = new THREE.Group()
+  orbit4 = new THREE.Group()
   orbit.add(circle)
-  // orbit.add(mesh)
+  orbit2.add(circle2)
+  orbit3.add(circle3)
+  orbit4.add(circle4)
+
   orbit.add(mesh)
+  orbit2.add(mesh2)
+  orbit3.add(mesh3)
+  orbit4.add(mesh4)
 
   let orbitDir = new THREE.Group()
+  let orbitDir2 = new THREE.Group()
+  let orbitDir3 = new THREE.Group()
+  let orbitDir4 = new THREE.Group()
   orbitDir.rotation.x = 0.15
   orbitDir.add(orbit)
+  orbitDir2.add(orbit2)
+  orbitDir3.add(orbit3)
+  orbitDir4.add(orbit4)
 
   const planetGeometry = new THREE.BufferGeometry()
 
@@ -119,7 +192,7 @@ const initScene = function() {
 
   controls.connect({ pan: false })
 
-  scene.add(planet, orbitDir)
+  scene.add(orbitDir, orbitDir2, orbitDir3, orbitDir4)
 }
 
 export function setRenderer({ canvas }) {
@@ -143,8 +216,13 @@ function onRender() {
   // mesh.rotation.x += 35.5e-4
   // orbit.rotation.y += 35.5e-4
   orbit.rotation.y += 0.002
+  orbit2.rotation.y -= 0.002
+  orbit3.rotation.y -= 0.002
+  orbit4.rotation.y += 0.002
   mesh.lookAt(camera.position)
   mesh2.lookAt(camera.position)
+  mesh3.lookAt(camera.position)
+  mesh4.lookAt(camera.position)
   controls.update()
   renderer.render(scene, camera)
 }
