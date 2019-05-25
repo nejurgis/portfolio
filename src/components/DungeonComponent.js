@@ -3,7 +3,8 @@ import * as THREE from "three"
 import debounce from "lodash/debounce"
 import DeviceOrientationController from "../lib/DeviceOrientationController"
 import sphereGeometry from "../assets/peels_d25.json"
-import ima from "../assets/sc.png"
+import g from "../assets/g.gif"
+import ima from "../assets/Selected_Poster.png"
 import { withStyles } from "@material-ui/core"
 
 const styles = {
@@ -22,37 +23,58 @@ const styles = {
 }
 
 let playing = false
-let renderer, scene, camera, planet, controls, group
+let renderer, scene, camera, planet, controls, mesh, mesh2, orbit, h
 
 const initScene = function() {
-  var curve = new THREE.EllipseCurve(
-    0,
-    0, // ax, aY
-    20,
-    10, // xRadius, yRadius
-    0,
-    2 * Math.PI, // aStartAngle, aEndAngle
-    false, // aClockwise
-    1 // aRotation
-  )
-
-  const loader = new THREE.TextureLoader()
-  const texture = loader.load(ima)
-  var points = curve.getPoints(50)
-  var geometry2 = new THREE.ShapeGeometry().setFromPoints(points)
-
-  var material = new THREE.MeshStandardMaterial({
-    map: texture,
-
-    // colorWrite: false,
-  })
-
-  // Create the final object to add to the scene
-  var ellipse = new THREE.Line(geometry2, material)
-
   scene = new THREE.Scene()
 
   camera = new THREE.PerspectiveCamera(111, 1, 0.1, 100)
+  // TEXTURES
+  const loader2 = new THREE.TextureLoader()
+  const texture = loader2.load(ima, tex => {
+    tex.needsUpdate = true
+    console.log("texture.width:", tex.image.height)
+    mesh.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
+  })
+  const texture2 = loader2.load(g, tex => {
+    tex.needsUpdate = true
+    mesh2.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
+  })
+  // MATERIALS
+  var material = new THREE.MeshBasicMaterial({ map: texture })
+  var material2 = new THREE.MeshBasicMaterial({ map: texture2 })
+  // GEOMETRIES
+  const geometry = new THREE.PlaneGeometry(20, 20)
+  const geometry2 = new THREE.PlaneGeometry(20, 20)
+  // COMBINING
+  mesh = new THREE.Mesh(geometry, material)
+  mesh2 = new THREE.Mesh(geometry2, material2)
+  // POSITIONS
+  mesh.position.set(10.2, 0, 0)
+  mesh2.position.set(10.2, 0, 0)
+
+  // The TRAVEL PATH
+  let geom = new THREE.CircleGeometry(10.2, 100)
+  let geom2 = new THREE.CircleGeometry(10.2, 100)
+  // LINE
+  let circle = new THREE.Line(
+    geom,
+    new THREE.LineDashedMaterial({ color: "aqua" })
+  )
+  let circle2 = new THREE.Line(
+    geom2,
+    new THREE.LineDashedMaterial({ color: "aqua" })
+  )
+  circle2.rotation.x = Math.PI * 5.5
+
+  orbit = new THREE.Group()
+  orbit.add(circle)
+  // orbit.add(mesh)
+  orbit.add(mesh)
+
+  let orbitDir = new THREE.Group()
+  orbitDir.rotation.x = 0.15
+  orbitDir.add(orbit)
 
   const planetGeometry = new THREE.BufferGeometry()
 
@@ -91,29 +113,15 @@ const initScene = function() {
     })
   )
 
-  var material = new THREE.MeshBasicMaterial({ map: texture })
-  // var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-  const geometry = new THREE.PlaneBufferGeometry(1, 1, 1)
-  const mesh = new THREE.Mesh(geometry, material)
-
-  // mesh.on("click", e => {
-  //   console.log("event", e)
-  // })
   camera.position.z = 0
-  mesh.position.x = 1
-  // mesh.position.y = 1
-  // mesh.position.z = 1
 
   controls = new DeviceOrientationController(camera, renderer.domElement)
-  console.log("renderer.domElement:", mesh.domElement)
+
   controls.connect({ pan: false })
 
-  scene.add(mesh, planet, ellipse)
+  scene.add(planet, orbitDir)
 }
 
-function track() {
-  console.log("bam")
-}
 export function setRenderer({ canvas }) {
   return (renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -130,14 +138,23 @@ export function onResize({ width, height }) {
 }
 
 function onRender() {
-  planet.rotation.x += 2.5e-4
+  planet.rotation.x += 1.5e-4
+  // mesh.position.x = 5 * Math.cos(t) + 0
+  // mesh.rotation.x += 35.5e-4
+  // orbit.rotation.y += 35.5e-4
+  orbit.rotation.y += 0.002
+  mesh.lookAt(camera.position)
+  mesh2.lookAt(camera.position)
   controls.update()
   renderer.render(scene, camera)
 }
 
 function render() {
   onRender()
-  if (playing) requestAnimationFrame(render)
+  if (playing) {
+    requestAnimationFrame(render)
+    // console.log(mesh)
+  }
 }
 
 export function play() {
