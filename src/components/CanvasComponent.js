@@ -25,7 +25,7 @@ const itemStyle = {
   pointerEvents: "none",
 }
 
-export default class CanvasComponent extends React.Component {
+export default class CanvasComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {

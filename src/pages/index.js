@@ -15,10 +15,21 @@ const Container = styled.div`
   height: 100vh;
 `
 
-const Text = styled.div`
+const MobText = styled.div`
+  line-height: 5rem;
+  margin-top: 4rem;
   text-align: center;
   font-size: 4rem;
   max-width: 110rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  z-index: 2;
+  pointer-events: none;
+`
+const Text = styled.div`
+  text-align: center;
+  font-size: 4rem;
+  max-width: 90rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   z-index: 2;
@@ -50,6 +61,23 @@ const DungeonLoading = props => {
     return null
   }
 }
+
+const HeaderLoading = props => {
+  if (props.error) {
+    return null
+  } else if (props.timedOut) {
+    return null
+  } else if (props.pastDelay) {
+    return null
+  } else {
+    return null
+  }
+}
+
+const HeaderComponent = Loadable({
+  loader: () => import("../components/ThreeHeader"),
+  loading: HeaderLoading,
+})
 
 const DungeonComponent = Loadable({
   loader: () => import("../components/DungeonComponent"),
@@ -90,8 +118,9 @@ export default class IndexPage extends Component {
     this.setState({ width: window.innerWidth })
     // console.log("window width", this.state.width)
 
-    if (this.state.width <= 600) {
+    if (this.state.width <= 700) {
       this.setState({ mode: "mobile" })
+      console.log(this.state.width)
     } else {
       this.setState({ mode: "desktop" })
     }
@@ -101,14 +130,16 @@ export default class IndexPage extends Component {
     if (this.state.mode === "mobile") {
       return (
         <>
-          <Text>
-            <h1>
+          <MobText>
+            <h3>
               Hey,
               <Clickable> </Clickable>
               <NavLink to="/">Jurgis</NavLink>
-              Here. I'm a Graphic Designer who does Web Development.
-            </h1>
-          </Text>
+              Here. I'm a Graphic Designer who does Web Development &amp;
+              Experience Design.
+            </h3>
+          </MobText>
+          {/* <HeaderComponent /> */}
           <DungeonComponent />
         </>
       )
@@ -126,11 +157,12 @@ export default class IndexPage extends Component {
           <Container>
             <CanvasComponent />
             <Text>
-              <h1>
+              <h1 ref={this.selector}>
+                <p id="text" />
                 Hey,
                 <Clickable> </Clickable>
                 <NavLink to="/">Jurgis</NavLink>
-                Here. I'm a Graphic Designer who does Web Development.
+                Here. I'm a Graphic Designer who does Web Development .
               </h1>
             </Text>
           </Container>
