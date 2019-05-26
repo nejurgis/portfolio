@@ -130,7 +130,7 @@ export default class IndexPage extends Component {
     if (this.state.mode === "mobile") {
       return (
         <>
-          <MobText>
+          {/* <MobText>
             <h3>
               Hey,
               <Clickable> </Clickable>
@@ -138,7 +138,7 @@ export default class IndexPage extends Component {
               Here. I'm a Graphic Designer who does Web Development &amp;
               Experience Design.
             </h3>
-          </MobText>
+          </MobText> */}
           {/* <HeaderComponent /> */}
           <DungeonComponent />
         </>

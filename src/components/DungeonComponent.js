@@ -8,6 +8,8 @@ import ima from "../assets/Selected_Poster.png"
 import hen from "../assets/hen.jpg"
 import selText from "../assets/selText.png"
 import { withStyles } from "@material-ui/core"
+import CanvasComponent from "../components/CanvasComponent"
+import { navigate } from "@reach/router"
 
 const styles = {
   animationRoot: {
@@ -30,17 +32,24 @@ let renderer,
   camera,
   planet,
   controls,
-  mesh,
+  selectedCampaign,
   mesh2,
   mesh3,
   mesh4,
   orbit,
   orbit2,
   orbit3,
-  orbit4
+  orbit4,
+  raycaster,
+  mouse3D,
+  clickedItem,
+  pos
 
 const initScene = function() {
   scene = new THREE.Scene()
+
+  raycaster = new THREE.Raycaster()
+  mouse3D = new THREE.Vector3()
 
   camera = new THREE.PerspectiveCamera(111, 1, 0.1, 100)
   // TEXTURES
@@ -48,7 +57,7 @@ const initScene = function() {
   const texture = loader2.load(ima, tex => {
     tex.needsUpdate = true
     console.log("texture.width:", tex.image.height)
-    mesh.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
+    selectedCampaign.scale.set(1.0, tex.image.height / tex.image.width, 1.0)
   })
   const texture2 = loader2.load(henText, tex => {
     tex.needsUpdate = true
@@ -90,51 +99,55 @@ const initScene = function() {
   const geometry2 = new THREE.PlaneGeometry(20, 20)
   const geometry3 = new THREE.PlaneGeometry(20, 20)
   const geometry4 = new THREE.PlaneGeometry(20, 20)
+  geometry.name = "selectedCampaign"
+  geometry3.name = "henoticCampaign"
   // COMBINING
-  mesh = new THREE.Mesh(geometry, material)
+  selectedCampaign = new THREE.Mesh(geometry, material)
+  selectedCampaign.name = "selectedCampaign"
   mesh2 = new THREE.Mesh(geometry2, material2)
   mesh3 = new THREE.Mesh(geometry3, material3)
+  mesh3.name = "henoticCampaign"
   mesh4 = new THREE.Mesh(geometry4, material4)
   // POSITIONS
-  mesh.position.set(15.2, 0, 0)
+  selectedCampaign.position.set(15.2, 0, 0)
   mesh2.position.set(10.2, 17, 0)
   mesh3.position.set(10.2, 0, 0)
   mesh4.position.set(10.2, -10, 0)
 
   // The TRAVEL PATH
-  let geom = new THREE.CircleGeometry(15.2, 100)
-  let geom2 = new THREE.CircleGeometry(10.2, 100)
-  let geom3 = new THREE.CircleGeometry(10.2, 100)
-  let geom4 = new THREE.CircleGeometry(10.2, 100)
+  // let geom = new THREE.CircleGeometry(15.2, 100)
+  // let geom2 = new THREE.CircleGeometry(10.2, 100)
+  // let geom3 = new THREE.CircleGeometry(10.2, 100)
+  // let geom4 = new THREE.CircleGeometry(10.2, 100)
   // LINE
-  let circle = new THREE.Line(
-    geom,
-    new THREE.LineDashedMaterial({ color: "aqua" })
-  )
-  let circle2 = new THREE.Line(
-    geom2,
-    new THREE.LineDashedMaterial({ color: "aqua" })
-  )
-  let circle3 = new THREE.Line(
-    geom3,
-    new THREE.LineDashedMaterial({ color: "aqua" })
-  )
-  let circle4 = new THREE.Line(
-    geom4,
-    new THREE.LineDashedMaterial({ color: "aqua" })
-  )
-  circle2.rotation.x = Math.PI * 5.5
+  // let circle = new THREE.Line(
+  //   geom,
+  //   new THREE.LineDashedMaterial({ color: "aqua" })
+  // )
+  // let circle2 = new THREE.Line(
+  //   geom2,
+  //   new THREE.LineDashedMaterial({ color: "aqua" })
+  // )
+  // let circle3 = new THREE.Line(
+  //   geom3,
+  //   new THREE.LineDashedMaterial({ color: "aqua" })
+  // )
+  // let circle4 = new THREE.Line(
+  //   geom4,
+  //   new THREE.LineDashedMaterial({ color: "aqua" })
+  // )
+  // circle2.rotation.x = Math.PI * 5.5
 
   orbit = new THREE.Group()
   orbit2 = new THREE.Group()
   orbit3 = new THREE.Group()
   orbit4 = new THREE.Group()
-  orbit.add(circle)
-  orbit2.add(circle2)
-  orbit3.add(circle3)
-  orbit4.add(circle4)
+  // orbit.add(circle)
+  // orbit2.add(circle2)
+  // orbit3.add(circle3)
+  // orbit4.add(circle4)
 
-  orbit.add(mesh)
+  orbit.add(selectedCampaign)
   orbit2.add(mesh2)
   orbit3.add(mesh3)
   orbit4.add(mesh4)
@@ -219,7 +232,7 @@ function onRender() {
   orbit2.rotation.y -= 0.002
   orbit3.rotation.y -= 0.002
   orbit4.rotation.y += 0.002
-  mesh.lookAt(camera.position)
+  selectedCampaign.lookAt(camera.position)
   mesh2.lookAt(camera.position)
   mesh3.lookAt(camera.position)
   mesh4.lookAt(camera.position)
@@ -244,6 +257,50 @@ export function pause() {
   playing = false
 }
 
+const checkIntersects = function(e) {
+  // Touch or mouse
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  console.log("e.clientX:", e.clientX)
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
+
+  mouse3D.x = (clientX / window.innerWidth) * 2 - 1
+  mouse3D.y = -(clientY / window.innerHeight) * 2 + 1
+  mouse3D.z = 0.5
+  raycaster.setFromCamera(mouse3D, camera)
+
+  return raycaster.intersectObjects(scene.children, true)
+}
+
+const handleDown = function(e) {
+  e.preventDefault()
+  const intersects = checkIntersects(e)
+
+  if (!intersects.length) return
+
+  clickedItem = intersects[0]
+  pos = clickedItem.point
+  console.log("clickedItem:", clickedItem.object.name)
+  // window.location = "http://www.google.com"
+  // navigate("/about/")
+
+  console.log("position of a clicked item", pos)
+  // THANKS to https://github.com/nickmcmillan/three-cannon-boilerplate/blob/a4543c42eb652868a656d6040576f79fbfb119f7/src/utils/handleInputs.js for this code
+
+  switch (clickedItem.object.name) {
+    case "selectedCampaign":
+      console.log("yes!")
+      break
+
+    case "henoticCampaign":
+      console.log("henotic!")
+      break
+
+    default:
+      // do nothing
+      return
+  }
+}
+
 class IntroScene extends React.Component {
   constructor(props) {
     super(props)
@@ -256,16 +313,8 @@ class IntroScene extends React.Component {
     play()
   }
 
-  track() {
-    console.log("bam")
-  }
   _onResize() {
     const depth = window.devicePixelRatio
-
-    // const dims = this.animationRoot.current.getBoundingClientRect()
-    // const width = dims.width * depth
-    // const height = dims.height * depth
-    // onResize({ width, height })
 
     if (this.animationRoot.current !== null) {
       const dims = this.animationRoot.current.getBoundingClientRect()
@@ -281,6 +330,10 @@ class IntroScene extends React.Component {
     setRenderer({ canvas: this.animationRoot.current })
     initScene()
     window.addEventListener("resize", this.onResize)
+
+    window.addEventListener("mousedown", handleDown, false)
+
+    window.addEventListener("touchstart", handleDown, false)
     this._onResize()
     this.playIntroAnimation()
   }
