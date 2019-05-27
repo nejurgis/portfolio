@@ -110,8 +110,8 @@ const initScene = function() {
   mesh4 = new THREE.Mesh(geometry4, material4)
   // POSITIONS
   selectedCampaign.position.set(15.2, 0, 0)
-  mesh2.position.set(10.2, 17, 0)
-  mesh3.position.set(10.2, 0, 0)
+  mesh2.position.set(10.2, -13, 0)
+  mesh3.position.set(13.2, 0, 0)
   mesh4.position.set(10.2, -10, 0)
 
   // The TRAVEL PATH
@@ -161,6 +161,10 @@ const initScene = function() {
   orbitDir2.add(orbit2)
   orbitDir3.add(orbit3)
   orbitDir4.add(orbit4)
+  orbit.rotation.y = 0.7
+  orbit2.rotation.y = -9.1
+  orbit3.rotation.y = -9.1
+  orbit4.rotation.y = 0.7
 
   const planetGeometry = new THREE.BufferGeometry()
 
@@ -224,14 +228,10 @@ export function onResize({ width, height }) {
 }
 
 function onRender() {
-  planet.rotation.x += 1.5e-4
-  // mesh.position.x = 5 * Math.cos(t) + 0
-  // mesh.rotation.x += 35.5e-4
-  // orbit.rotation.y += 35.5e-4
-  orbit.rotation.y += 0.002
-  orbit2.rotation.y -= 0.002
-  orbit3.rotation.y -= 0.002
-  orbit4.rotation.y += 0.002
+  orbit.rotation.y += 0.5e-4
+  orbit2.rotation.y -= 0.5e-4
+  orbit3.rotation.y -= 0.5e-4
+  orbit4.rotation.y += 0.5e-4
   selectedCampaign.lookAt(camera.position)
   mesh2.lookAt(camera.position)
   mesh3.lookAt(camera.position)
@@ -289,10 +289,12 @@ const handleDown = function(e) {
   switch (clickedItem.object.name) {
     case "selectedCampaign":
       console.log("yes!")
+      navigate("/web/")
       break
 
     case "henoticCampaign":
       console.log("henotic!")
+
       break
 
     default:

@@ -6,6 +6,38 @@ import SEO from "../components/seo"
 import "../components/layout.css"
 import styled from "@emotion/styled"
 
+const Header = styled.header`
+  display: flex;
+  position: fixed;
+  box-sizing: border-box;
+
+  justify-content: space-between;
+  width: 100%;
+  color: white;
+  font-size: 2.9rem;
+  padding: 1.4rem;
+  mix-blend-mode: hard-light;
+  user-select: none;
+`
+const Nav = styled.nav`
+  pointer-events: all;
+`
+
+const StyledLink = styled(props => <Link {...props} />)`
+  margin-left: 1.6rem;
+  color: black;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &:visited {
+    text-decoration: none;
+  }
+  &:focus {
+    text-decoration: none;
+  }
+`
+
 const Container = styled.div`
   margin: 0;
   display: flex;
@@ -140,6 +172,13 @@ export default class IndexPage extends Component {
             </h3>
           </MobText> */}
           {/* <HeaderComponent /> */}
+          <Header>
+            <Nav>
+              <StyledLink to="/">GD</StyledLink>
+              <StyledLink to="/web/">WEB</StyledLink>
+              <StyledLink to="/">VIDEO</StyledLink>
+            </Nav>
+          </Header>
           <DungeonComponent />
         </>
       )
