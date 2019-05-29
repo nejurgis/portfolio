@@ -33,7 +33,6 @@ const TitleWrapper = styled.div`
   font-size: 4rem;
   line-height: 4rem;
 `
-const Text = styled.p``
 
 const WebSectionComponent = () => {
   return (

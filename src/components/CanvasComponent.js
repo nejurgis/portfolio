@@ -1,13 +1,15 @@
 import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
+import throttle from "lodash/throttle"
+import debounce from "lodash/debounce"
 
 const url = "https://jurgioserveris.herokuapp.com/"
 // const url = "localhost:3000"
 console.log("went inside of canvas")
 const socket = io.connect(url)
 
-let frame
+let frame, heatmap
 const itemStyle = {
   // MAKES THE CANVAS ON TOP OF STUFF
   position: "fixed",
@@ -42,11 +44,48 @@ export default class CanvasComponent extends Component {
       maxlength: 250,
       url: "localhost:3000",
     }
+    this.onResize = debounce(this._onResize, 200).bind(this)
+    this.heatSpace = React.createRef()
   }
 
-  canvasRef = React.createRef()
+  _onResize() {
+    const depth = window.devicePixelRatio
+    if (this.heatSpace.current !== null) {
+      const dims = this.heatSpace.current.getBoundingClientRect()
+      const width = dims.width * depth
+      const height = dims.height * depth
+      // onResize({ width, height })
+      this.heatSpace.current.width = width
+      this.heatSpace.current.height = height
+      heatmap = simpleheat(this.heatSpace.current).max(20)
+      heatmap.gradient(this.state.col)
+      heatmap.radius(this.state.r, this.state.r2)
+      window.requestAnimationFrame(this.draw)
+
+      // console.log("this.heatSpace.current.width():", this.heatSpace.current)
+    } else {
+      console.log("heatSpace is null")
+    }
+
+    //     // console.log("canvas changed")
+    //     canvas.width = width
+    //     canvas.height = height
+    //     heatmap = simpleheat(canvas).max(20)
+    //     heatmap.gradient(this.state.col)
+    //     heatmap.radius(this.state.r, this.state.r2)
+
+    //     return true
+    //   }
+  }
+
+  initHeatmap = () => {
+    heatmap = simpleheat(this.heatSpace.current).max(20)
+    heatmap.gradient(this.state.col)
+    heatmap.radius(this.state.r, this.state.r2)
+  }
 
   componentDidMount() {
+    socket.emit("load history")
     console.log("mounted canvas")
 
     console.log("check 1", socket.connected)
@@ -61,71 +100,74 @@ export default class CanvasComponent extends Component {
     socket.on("connect", function() {
       console.log("check 2", socket.connected)
     })
-    // io.connect(url)
-    // }
 
     window.requestAnimationFrame =
       window.requestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.webkitRequestAnimationFrame ||
       window.msRequestAnimationFrame
-    this.canvas = this.canvasRef.current
+    this.canvas = this.heatSpace.current
+    this.initHeatmap()
+    // heatmap = simpleheat(this.canvas).max(20)
+    // heatmap.gradient(this.state.col)
+    // heatmap.radius(this.state.r, this.state.r2)
+    // heatmap.clear()
+    document.body.addEventListener(
+      "mousemove",
+      throttle(this.collectMouseData, 5)
+    )
 
-    this.heatmap = simpleheat(this.canvas).max(20)
-    this.heatmap.gradient(this.state.col)
-    this.heatmap.radius(this.state.r, this.state.r2)
-    // this.heatmap.clear()
-    document.body.addEventListener("mousemove", this.collectMouseData)
-
-    socket.emit("load history")
     socket.on("here you go", history => {
       console.log("got it thanks", history[0])
       this.setState({
         data: [...this.state.data, ...history],
       })
       this.state.data.forEach(el => {
-        this.heatmap.add(el)
+        heatmap.add(el)
       })
+
       window.requestAnimationFrame(this.draw)
     })
     socket.on("livestream", coordinate => {
-      this.heatmap.add(coordinate)
-      // console.log("heatmap data length:", this.heatmap._data.length)
+      heatmap.add(coordinate)
+      // console.log("heatmap data length:", heatmap._data.length)
 
-      if (this.heatmap._data.length > 5000) {
-        // this.heatmap._data.splice(0, 4500)
-        this.heatmap.clear()
-        // window.requestAnimationFrame(this.draw)
+      if (heatmap._data.length > 5000) {
+        // heatmap._data.splice(0, 4500)
+        heatmap.clear()
 
         console.log(
           "Went here and deleted  5000 elements:",
-          this.heatmap._data.length
+          heatmap._data.length
         )
-      } else if (this.heatmap._data.length >= 700) {
-        this.heatmap._data.splice(0, 500)
+      } else if (heatmap._data.length >= 700) {
+        heatmap._data.splice(0, 500)
+
         window.requestAnimationFrame(this.draw)
         console.log(
           "Went here and deleted  500 elements:",
-          this.heatmap._data.length
+          heatmap._data.length
         )
       }
 
-      if (this.heatmap._data.length > this.state.maxlength) {
-        this.heatmap._data.shift()
+      if (heatmap._data.length > this.state.maxlength) {
+        heatmap._data.shift()
       }
       window.requestAnimationFrame(this.draw)
     })
 
     // WINDOW RESIZE QUEST BEGINS HERE
     // solution from here : https://www.hawatel.com/blog/handle-window-resize-in-react/
-    this.resizeCanvasToDisplaySize(this.canvas)
-    window.addEventListener(
-      "resize",
+    // this.resizeCanvasToDisplaySize(this.canvas)
+    // window.addEventListener(
+    //   "resize",
 
-      () => {
-        this.resizeCanvasToDisplaySize(this.canvas)
-      }
-    )
+    //   () => {
+    //     this.resizeCanvasToDisplaySize(this.canvas)
+    //   }
+    // )
+
+    window.addEventListener("resize", this.onResize)
   }
 
   componentWillUnmount() {
@@ -135,17 +177,14 @@ export default class CanvasComponent extends Component {
 
     // socket.disconnect()
     // socket.close()
-    window.removeEventListener(
-      "resize",
 
-      () => {
-        this.resizeCanvasToDisplaySize(this.canvas)
-      }
-    )
+    // window.removeEventListener("resize", () => {
+    //   this.resizeCanvasToDisplaySize(this.canvas)
+    // })
   }
 
   draw = () => {
-    this.heatmap.draw()
+    heatmap.draw()
     frame = null
   }
 
@@ -156,47 +195,45 @@ export default class CanvasComponent extends Component {
 
   manualSocketDisconnect = () => {
     socket.emit("manual-disconnection", socket.id)
-
     socket.close()
-
     console.log("Socket Closed. ")
   }
 
-  resizeCanvasToDisplaySize = canvas => {
-    let width = canvas.clientWidth
-    // let width = this.canvasRef.current.clientWidth
+  // resizeCanvasToDisplaySize = canvas => {
+  //   let width = canvas.clientWidth
+  //   // let width = this.canvasRef.current.clientWidth
 
-    let height = canvas.clientHeight
-    this.heatmap = simpleheat(canvas).max(20)
+  //   let height = canvas.clientHeight
+  //   heatmap = simpleheat(canvas).max(20)
 
-    if (canvas.width !== width || canvas.height !== height) {
-      // console.log("canvas changed")
-      canvas.width = width
-      canvas.height = height
-      this.heatmap = simpleheat(canvas).max(20)
-      this.heatmap.gradient(this.state.col)
-      this.heatmap.radius(this.state.r, this.state.r2)
+  //   if (canvas.width !== width || canvas.height !== height) {
+  //     // console.log("canvas changed")
+  //     canvas.width = width
+  //     canvas.height = height
+  //     heatmap = simpleheat(canvas).max(20)
+  //     heatmap.gradient(this.state.col)
+  //     heatmap.radius(this.state.r, this.state.r2)
 
-      return true
-    }
-    console.log("in the false zone")
-    return false
+  //     return true
+  //   }
+  //   console.log("in the false zone")
+  //   return false
 
-    // let depth = window.devicePixelRatio
-    // let displayWidth = Math.floor()
-  }
+  //   // let depth = window.devicePixelRatio
+  //   // let displayWidth = Math.floor()
+  // }
 
   collectMouseData = e => {
     e.preventDefault()
     let x = e.offsetX
     let y = e.offsetY
-
-    this.heatmap.add([x, y, 1])
+    // console.log("x:", x)
+    heatmap.add([x, y, 1])
     socket.emit("hell", [x, y, 1])
 
-    if (this.heatmap._data.length > this.state.maxlength) {
-      this.heatmap._data.shift()
-      // this.heatmap.clear()
+    if (heatmap._data.length > this.state.maxlength) {
+      heatmap._data.shift()
+      // heatmap.clear()
     }
     frame = frame || window.requestAnimationFrame(this.draw)
   }
@@ -206,7 +243,7 @@ export default class CanvasComponent extends Component {
       return (
         <canvas
           style={itemStyle}
-          ref={this.canvasRef}
+          ref={this.heatSpace}
           width={window.innerWidth}
           height={window.innerHeight}
         />

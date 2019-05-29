@@ -68,14 +68,14 @@ const Text = styled.div`
   pointer-events: none;
 `
 const NavLink = styled(Link)`
-  color: #222;
-  font-size: 1rem;
-  font-weight: normal;
+  color: black;
+  // background-color: red;
+
   line-height: 1;
   margin: 1rem 0.5rem 0 0;
   padding: 0.55rem;
-  text-decoration: none;
-  font-size: 2rem;
+
+  text-decoration: underline;
   pointer-events: auto;
 `
 const Clickable = styled.div`
@@ -200,8 +200,9 @@ export default class IndexPage extends Component {
                 <p id="text" />
                 Hey,
                 <Clickable> </Clickable>
-                <NavLink to="/">Jurgis</NavLink>
-                Here. I'm a Graphic Designer who does Web Development .
+                <NavLink to="">Jurgis</NavLink>
+                Here. I'm a <NavLink>Web Developer</NavLink>who does
+                <NavLink> Graphic Design</NavLink>.
               </h1>
             </Text>
           </Container>

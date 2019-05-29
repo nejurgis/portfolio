@@ -342,6 +342,8 @@ class IntroScene extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.onResize)
+    window.removeEventListener("mousedown", handleDown)
+    window.removeEventListener("touchstart", handleDown)
     console.log("component Unmount was called in the dungeons")
   }
 
