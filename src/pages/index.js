@@ -201,8 +201,8 @@ export default class IndexPage extends Component {
                 Hey,
                 <Clickable> </Clickable>
                 <NavLink to="">Jurgis</NavLink>
-                Here. I'm a <NavLink>Web Developer</NavLink>who does
-                <NavLink> Graphic Design</NavLink>.
+                Here. I'm a <NavLink to="/dev/">Web Developer</NavLink>who does
+                Graphic Design.
               </h1>
             </Text>
           </Container>

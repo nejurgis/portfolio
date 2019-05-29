@@ -10,6 +10,7 @@ console.log("went inside of canvas")
 const socket = io.connect(url)
 
 let frame, heatmap
+let colList = ["blue", "red", "green", "tomato", "yellow"]
 const itemStyle = {
   // MAKES THE CANVAS ON TOP OF STUFF
   position: "fixed",
@@ -33,11 +34,12 @@ export default class CanvasComponent extends Component {
     this.state = {
       data: [],
       col: {
-        0.9: "orange",
+        0.9: `${colList[Math.floor(Math.random() * colList.length)]}`,
         0.1: "red",
         0.5: "blue",
         0.8: "cyan",
-        0.8: "yellow",
+
+        0.8: `${colList[Math.floor(Math.random() * colList.length)]}`,
       },
       r: 25,
       r2: 15,

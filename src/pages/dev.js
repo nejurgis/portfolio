@@ -1,59 +1,27 @@
+import React, { useState } from "react"
 import styled from "@emotion/styled"
-import React from "react"
+
 import BTC from "../assets/hen.jpg"
 import vid from "../assets/vid.webm"
 import drift from "../assets/drift.webm"
 import lexicon from "../assets/lexicon.webm"
 import diff from "../assets/diff.webm"
 import ReactPlayer from "react-player"
-import { Direction, Slider } from "react-player-controls"
+import { Waypoint } from "react-waypoint"
 
-const GRAY = "#878c88"
-const SliderBar = ({ direction, value, style }) => (
-  <div
-    style={Object.assign(
-      {},
-      {
-        position: "absolute",
-        background: GRAY,
-        borderRadius: 4,
-      },
-      direction === Direction.HORIZONTAL
-        ? {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            width: `${value * 100}%`,
-          }
-        : {
-            right: 0,
-            bottom: 0,
-            left: 0,
-            height: `${value * 100}%`,
-          },
-      style
-    )}
-  />
-)
-
-const List = styled.ul`
-  grid-gap: 2rem 2rem;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  display: grid;
-  padding: 0;
-
-  color: white;
-  line-height: 2.8rem;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  word-wrap: break-word;
-  word-break: break-word;
-  letter-spacing: 0.025rem;
+const Header = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 2rem;
+  font-size: 1.7rem;
+  color: inherit;
+  text-decoration: none;
 `
 
 const Container = styled.div`
   max-width: 100vw;
-  padding: 10rem;
+  padding: 20rem;
   margin: 0 auto;
 `
 
@@ -65,11 +33,18 @@ const Title = styled.div`
   line-height: 4rem;
 `
 
-const Project = styled.section``
+const Project = styled.section`
+  min-height: 80vh;
+  -webkit-box-align: center;
+  padding: 1rem;
+`
 const Wrapper = styled.div`
   margin-top: 4em;
   display: flex;
   flex-direction: column;
+  border-radius: 2rem;
+  width: auto;
+  height: auto;
 `
 const ImageSection = styled.div`
   background: center center;
@@ -79,8 +54,6 @@ const ImageSection = styled.div`
   height: 90vh;
   box-shadow: 0 0 30px black;
 `
-
-const Image = styled.div``
 
 const Caption = styled.figcaption`
   text-align: center;
@@ -96,100 +69,135 @@ const StyledLinks = styled.a`
   color: tomato;
 `
 
-const Player = styled(props => <ReactPlayer />)`
-  margin-top: 1rem;
-`
-
 const StyledPlayer = styled(props => <ReactPlayer {...props} />)`
-  width: 120%;
-  height: 100%;
   margin: 0 auto;
   box-shadow: 0 0 30px black;
+  z-index: 1;
 `
 
-function dev() {
+const dev = function(props) {
+  let [shouldPlay, updatePlayState] = useState(false)
+
+  const handleEnterViewport = () => {
+    console.log(StyledPlayer)
+    updatePlayState(true)
+  }
+  const handleExitViewport = () => {
+    console.log("exited")
+    updatePlayState(false)
+  }
+
   return (
     <>
+      <Header>
+        <nav>Jurgis Lietunovas</nav>
+        <a href="https://github.com/Nejurgis/" target="_blank">
+          Github
+        </a>
+        |<a href="mailto:j.lietunovas@gmail.com">Email</a>
+        <br />
+        <a href="https://instagram.com/naive.magic/" target="_blank">
+          Instagram
+        </a>
+      </Header>
       <Container>
-        <Project>
-          <Wrapper>
-            <StyledPlayer
-              url={diff}
-              playing
-              loop={true}
-              preload={true}
-              controls
-            />
+        <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
+          <Project>
+            <Wrapper>
+              <StyledPlayer
+                width="100%"
+                height="100%"
+                url={diff}
+                playing={shouldPlay}
+                loop={true}
+                preload="true"
+                controls
+              />
+              <Caption>
+                <h3>DIFFEREMENT</h3>
+                <p>
+                  BUILT FOR D.LANTINGA &amp; D.SMEDEMAN , CODE/DESIGN, MAY 2019
+                </p>
+                <p>not online yet</p>
+              </Caption>
+            </Wrapper>
+          </Project>
+        </Waypoint>
+        <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
+          <Project>
+            <Wrapper>
+              <StyledPlayer
+                width="100%"
+                height="100%"
+                url={vid}
+                playing={shouldPlay}
+                loop={true}
+                preload="true"
+                controls
+              />
 
-            <Caption>
-              <h3>TIZIANA KRÜGER</h3>
-              <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
-              <StyledLinks href="http://tizianakruger.com">
-                tizianakruger.com
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
-        </Project>
-        <Project>
-          <Wrapper>
-            <StyledPlayer
-              url={vid}
-              playing
-              loop={true}
-              preload={true}
-              controls
-            />
-            <Caption>
-              <h3>TIZIANA KRÜGER</h3>
-              <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
-              <StyledLinks href="http://tizianakruger.com">
-                tizianakruger.com
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
-        </Project>
-        <Project>
-          <Wrapper>
-            <StyledPlayer
-              url={lexicon}
-              playing
-              loop={true}
-              preload={true}
-              // controls
-            />
-            <Caption>
-              <h3>Lexicon of Graphic Design</h3>
-              <p>
-                BUILT FOR AN ASIGNMENT AT THE GERRIT RIETVELD ACADEMIE,
-                CODE/DESIGN, MAY 2017
-              </p>
-              <StyledLinks href="http://lexicon.surge.sh">
-                lexicon.surge.sh
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
-        </Project>
-        <Project>
-          <Wrapper>
-            <StyledPlayer
-              url={drift}
-              playing
-              loop={true}
-              preload={true}
-              // controls
-            />
-            <Caption>
-              <h3>Festival Drift</h3>
-              <p>
-                BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
-                D.JASIULEVIČIŪTĖ, APRIL 2019
-              </p>
-              <StyledLinks href="http://festivaldrift.com">
-                festivaldrift.com
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
-        </Project>
+              <Caption>
+                <h3>TIZIANA KRÜGER</h3>
+                <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
+                <StyledLinks href="http://tizianakruger.com">
+                  tizianakruger.com
+                </StyledLinks>
+              </Caption>
+            </Wrapper>
+          </Project>
+        </Waypoint>
+        <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
+          <Project>
+            <Wrapper>
+              <StyledPlayer
+                width="100%"
+                height="100%"
+                url={lexicon}
+                playing={shouldPlay}
+                loop={true}
+                preload="true"
+                // controls
+              />
+
+              <Caption>
+                <h3>Lexicon of Graphic Design</h3>
+                <p>
+                  BUILT FOR AN ASIGNMENT AT THE GERRIT RIETVELD ACADEMIE,
+                  CODE/DESIGN, MAY 2017
+                </p>
+                <StyledLinks href="http://lexicon.surge.sh">
+                  lexicon.surge.sh
+                </StyledLinks>
+              </Caption>
+            </Wrapper>
+          </Project>
+        </Waypoint>
+        <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
+          <Project>
+            <Wrapper>
+              <StyledPlayer
+                width="100%"
+                height="100%"
+                url={drift}
+                playing={shouldPlay}
+                loop={true}
+                preload="true"
+                controls
+              />
+
+              <Caption>
+                <h3>Festival Drift</h3>
+                <p>
+                  BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
+                  D.JASIULEVIČIŪTĖ, APRIL 2019
+                </p>
+                <StyledLinks href="http://festivaldrift.com">
+                  festivaldrift.com
+                </StyledLinks>
+              </Caption>
+            </Wrapper>
+          </Project>
+        </Waypoint>
       </Container>
     </>
   )
