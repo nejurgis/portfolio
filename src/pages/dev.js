@@ -158,7 +158,15 @@ const StyledPlayer = styled(props => <ReactPlayer {...props} />)`
     display: none;
   }
 `
-
+export const fluidImage = graphql`
+  fragment fluidImage on File {
+    childImageSharp {
+      fluid(maxWidth: 1000) {
+        ...GatsbyImageSharpFluid_tracedSVG
+      }
+    }
+  }
+`
 const dev = function() {
   const data = useStaticQuery(graphql`
     query {
@@ -314,27 +322,3 @@ const dev = function() {
 }
 
 export default dev
-
-export const fluidImage = graphql`
-  fragment fluidImage on File {
-    childImageSharp {
-      fluid(maxWidth: 1000) {
-        ...GatsbyImageSharpFluid_tracedSVG
-      }
-    }
-  }
-`
-
-export const query = graphql`
-  {
-    tiziana: file(relativePath: { eq: "tiziana.png" }) {
-      ...fluidImage
-    }
-    selected: file(relativePath: { eq: "selected.jpg" }) {
-      ...fluidImage
-    }
-    lexicon: file(relativePath: { eq: "lexicon.png" }) {
-      ...fluidImage
-    }
-  }
-`
