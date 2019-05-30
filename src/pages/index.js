@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
 import Loadable from "react-loadable"
+import "../components/main.css"
 
 import SEO from "../components/seo"
 import "../components/layout.css"
