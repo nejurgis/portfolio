@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
-import throttle from "lodash/throttle"
+
 import debounce from "lodash/debounce"
 
 const url = "https://jurgioserveris.herokuapp.com/"
@@ -34,7 +34,7 @@ export default class CanvasComponent extends Component {
     this.state = {
       data: [],
       col: {
-        0.9: `${colList[Math.floor(Math.random() * colList.length)]}`,
+        0.9: "orange",
         0.1: "red",
         0.5: "blue",
         0.8: "cyan",
@@ -66,7 +66,9 @@ export default class CanvasComponent extends Component {
 
       // console.log("this.heatSpace.current.width():", this.heatSpace.current)
     } else {
+      this.heatSpace = React.createRef()
       console.log("heatSpace is null")
+      console.log("this.heatSpace:", this.heatSpace)
     }
 
     //     // console.log("canvas changed")
@@ -114,10 +116,7 @@ export default class CanvasComponent extends Component {
     // heatmap.gradient(this.state.col)
     // heatmap.radius(this.state.r, this.state.r2)
     // heatmap.clear()
-    document.body.addEventListener(
-      "mousemove",
-      throttle(this.collectMouseData, 5)
-    )
+    document.body.addEventListener("mousemove", this.collectMouseData)
 
     socket.on("here you go", history => {
       console.log("got it thanks", history[0])
@@ -227,9 +226,9 @@ export default class CanvasComponent extends Component {
 
   collectMouseData = e => {
     e.preventDefault()
-    let x = e.offsetX
-    let y = e.offsetY
-    // console.log("x:", x)
+    let x = e.pageX
+    let y = e.pageY
+
     heatmap.add([x, y, 1])
     socket.emit("hell", [x, y, 1])
 

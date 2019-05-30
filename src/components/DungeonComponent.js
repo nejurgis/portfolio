@@ -289,7 +289,7 @@ const handleDown = function(e) {
   switch (clickedItem.object.name) {
     case "selectedCampaign":
       console.log("yes!")
-      navigate("/web/")
+      navigate("/dev/")
       break
 
     case "henoticCampaign":
@@ -341,6 +341,7 @@ class IntroScene extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("scene:", scene)
     window.removeEventListener("resize", this.onResize)
     window.removeEventListener("mousedown", handleDown)
     window.removeEventListener("touchstart", handleDown)

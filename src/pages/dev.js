@@ -8,6 +8,28 @@ import lexicon from "../assets/lexicon.webm"
 import diff from "../assets/diff.webm"
 import ReactPlayer from "react-player"
 import { Waypoint } from "react-waypoint"
+import { Link } from "gatsby"
+
+const size = {
+  mobileS: "320px",
+  mobileM: "375px",
+  mobileL: "425px",
+  tablet: "768px",
+  laptop: "1024px",
+  laptopL: "1440px",
+  desktop: "2560px",
+}
+
+export const device = {
+  mobileS: `(min-width: ${size.mobileS})`,
+  mobileM: `(min-width: ${size.mobileM})`,
+  mobileL: `(min-width: ${size.mobileL})`,
+  tablet: `(min-width: ${size.tablet})`,
+  laptop: `(min-width: ${size.laptop})`,
+  laptopL: `(min-width: ${size.laptopL})`,
+  desktop: `(min-width: ${size.desktop})`,
+  desktopL: `(min-width: ${size.desktop})`,
+}
 
 const Header = styled.header`
   position: fixed;
@@ -18,11 +40,40 @@ const Header = styled.header`
   color: inherit;
   text-decoration: none;
 `
+const Homelink = styled(props => <Link {...props} />)`
+  text-decoration: none;
+  color: black;
+
+  transition: background-color 0.35s ease;
+
+  &:hover {
+    text-decoration: underline;
+    color: red;
+    background-color: blue;
+  }
+`
+
+const Navlink = styled.a`
+  -webkit-font-smoothing: antialiased;
+  color: black;
+  text-decoration: none;
+  transition: background-color 0.35s ease;
+
+  &:hover {
+    text-decoration: underline;
+    color: red;
+    background-color: blue;
+  }
+`
 
 const Container = styled.div`
   max-width: 100vw;
   padding: 20rem;
   margin: 0 auto;
+
+  @media (max-width: 800px) {
+    padding: 0;
+  }
 `
 
 const Title = styled.div`
@@ -37,6 +88,10 @@ const Project = styled.section`
   min-height: 80vh;
   -webkit-box-align: center;
   padding: 1rem;
+
+  @media (max-width: 800) {
+    padding: 0;
+  }
 `
 const Wrapper = styled.div`
   margin-top: 4em;
@@ -47,12 +102,14 @@ const Wrapper = styled.div`
   height: auto;
 `
 const ImageSection = styled.div`
-  background: center center;
-  background-repeat: no-repeat;
-  background-image: url(${BTC});
-  background-size: contain;
-  height: 90vh;
-  box-shadow: 0 0 30px black;
+@media (max-width: 800px) {
+    background: center center;
+    background-repeat: no-repeat;
+    background-image: url(${BTC});
+    background-size: contain;
+    height: 90vh;
+    box-shadow: 0 0 30px black;
+  }
 `
 
 const Caption = styled.figcaption`
@@ -70,9 +127,18 @@ const StyledLinks = styled.a`
 `
 
 const StyledPlayer = styled(props => <ReactPlayer {...props} />)`
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
   margin: 0 auto;
   box-shadow: 0 0 30px black;
   z-index: 1;
+  background-color: black;
+
+  @media (max-width: 800px) {
+    display: none;
+  }
 `
 
 const dev = function(props) {
@@ -90,15 +156,23 @@ const dev = function(props) {
   return (
     <>
       <Header>
-        <nav>Jurgis Lietunovas</nav>
-        <a href="https://github.com/Nejurgis/" target="_blank">
-          Github
-        </a>
-        |<a href="mailto:j.lietunovas@gmail.com">Email</a>
+        <Homelink to="/">Jurgis Lietunovas</Homelink>
         <br />
-        <a href="https://instagram.com/naive.magic/" target="_blank">
+        <Navlink href="https://github.com/Nejurgis/" target="_blank">
+          Github
+        </Navlink>
+        |
+        <Navlink className="navLinks" href="mailto:j.lietunovas@gmail.com">
+          Email
+        </Navlink>
+        <br />
+        <Navlink
+          className="navLinks"
+          href="https://instagram.com/naive.magic/"
+          target="_blank"
+        >
           Instagram
-        </a>
+        </Navlink>
       </Header>
       <Container>
         <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
@@ -113,6 +187,7 @@ const dev = function(props) {
                 preload="true"
                 controls
               />
+              <ImageSection />
               <Caption>
                 <h3>DIFFEREMENT</h3>
                 <p>

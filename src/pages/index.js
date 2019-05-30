@@ -175,8 +175,8 @@ export default class IndexPage extends Component {
           <Header>
             <Nav>
               <StyledLink to="/">GD</StyledLink>
-              <StyledLink to="/web/">WEB</StyledLink>
-              <StyledLink to="/">VIDEO</StyledLink>
+              <StyledLink to="/dev"> </StyledLink>
+              {/* <StyledLink to="/">VIDEO</StyledLink> */}
             </Nav>
           </Header>
           <DungeonComponent />
@@ -199,8 +199,7 @@ export default class IndexPage extends Component {
               <h1 ref={this.selector}>
                 <p id="text" />
                 Hey,
-                <Clickable> </Clickable>
-                <NavLink to="">Jurgis</NavLink>
+                <NavLink to="/">Jurgis</NavLink>
                 Here. I'm a <NavLink to="/dev/">Web Developer</NavLink>who does
                 Graphic Design.
               </h1>
