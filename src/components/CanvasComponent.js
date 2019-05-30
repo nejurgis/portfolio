@@ -43,7 +43,7 @@ export default class CanvasComponent extends Component {
       },
       r: 25,
       r2: 15,
-      maxlength: 250,
+      maxlength: 350,
       url: "localhost:3000",
     }
     this.onResize = debounce(this._onResize, 200).bind(this)

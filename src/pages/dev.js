@@ -1,7 +1,5 @@
-import React, { useState } from "react"
+import React from "react"
 import styled from "@emotion/styled"
-import BackgroundImage from "gatsby-background-image"
-import BTC from "../assets/hen.jpg"
 import vid from "../assets/vid.webm"
 import drift from "../assets/drift.webm"
 import lexicon from "../assets/lexicon.webm"
@@ -10,6 +8,7 @@ import ReactPlayer from "react-player"
 
 import { Link, graphql, useStaticQuery } from "gatsby"
 import BackgroundSection from "../components/BackgroundSection"
+// Styles disappear on reload
 
 const Header = styled.header`
   position: fixed;
@@ -19,6 +18,11 @@ const Header = styled.header`
   font-size: 1.7rem;
   color: inherit;
   text-decoration: none;
+  @media (max-width: 800px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 `
 const Homelink = styled(props => <Link {...props} />)`
   text-decoration: none;
@@ -33,12 +37,17 @@ const Homelink = styled(props => <Link {...props} />)`
     background-color: blue;
   }
 `
+const Title = styled.h3`
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+`
 const BgWrapper = styled.div`
   > .bg {
     display: none;
     @media (max-width: 800px) {
       display: block;
       margin: 0;
+      padding-top: calc(984 / 1528 * 100%);
     }
   }
 `
@@ -65,43 +74,13 @@ const Container = styled.div`
   }
 `
 
-const WebImage = styled(BackgroundSection)`
-  position: fixed !important;
-  transition: height 0.3s !important;
-  left: 0;
-  width: 100vw;
-  background-position: 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 170px;
-  cursor: pointer;
-  -webkit-transform: translate3d(0px, 40px, 0px);
-  transform: translate3d(0px, 40px, 0px);
-  box-shadow: none;
-  @media (min-width: 768px) {
-    height: 250px;
-  }
-  @media (min-width: 1440px) {
-    height: 320px;
-  }
-`
-
-const Title = styled.div`
-  width: 100%;
-  border-bottom: 1px solid white;
-  padding: 2rem;
-  font-size: 4rem;
-  line-height: 4rem;
-`
-
 const Project = styled.section`
-  /* min-height: 80vh; */
-  @media (min-width: 800) {
+  @media (min-width: 800px) {
     -webkit-box-align: center;
     padding: 1rem 1rem 3rem 1rem;
   }
 
-  @media (max-width: 800) {
+  @media (max-width: 800px) {
     padding: 0 0 0.5rem 0;
   }
 `
@@ -111,18 +90,8 @@ const Wrapper = styled.div`
   border-radius: 2rem;
   width: auto;
   height: auto;
-  @media (max-width: 800) {
-    margin: 0;
-  }
-`
-const ImageSection = styled.div`
   @media (max-width: 800px) {
-    background: center center;
-    background-repeat: no-repeat;
-    background-image: url(${BTC});
-    background-size: contain;
-    height: 90vh;
-    box-shadow: 0 0 30px black;
+    margin: 0;
   }
 `
 
@@ -161,13 +130,13 @@ const StyledPlayer = styled(props => <ReactPlayer {...props} />)`
 export const fluidImage = graphql`
   fragment fluidImage on File {
     childImageSharp {
-      fluid(maxWidth: 1000) {
+      fluid(maxWidth: 1200) {
         ...GatsbyImageSharpFluid_tracedSVG
       }
     }
   }
 `
-const dev = function() {
+const dev = () => {
   const data = useStaticQuery(graphql`
     query {
       tiziana: file(relativePath: { eq: "tiziana.png" }) {
@@ -177,6 +146,12 @@ const dev = function() {
         ...fluidImage
       }
       lexicon: file(relativePath: { eq: "lexicon.png" }) {
+        ...fluidImage
+      }
+      differement: file(relativePath: { eq: "differement.png" }) {
+        ...fluidImage
+      }
+      drift: file(relativePath: { eq: "drift.png" }) {
         ...fluidImage
       }
     }
@@ -224,7 +199,7 @@ const dev = function() {
             />
 
             <Caption>
-              <h3>TIZIANA KRÜGER</h3>
+              <Title>TIZIANA KRÜGER</Title>
               <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
               <StyledLinks href="http://tizianakruger.com">
                 tizianakruger.com
@@ -236,7 +211,7 @@ const dev = function() {
           <Wrapper>
             <BgWrapper>
               <BackgroundSection
-                img={data.selected.childImageSharp.fluid}
+                img={data.differement.childImageSharp.fluid}
                 className="Container-bravo"
               />
             </BgWrapper>
@@ -252,7 +227,7 @@ const dev = function() {
             />
 
             <Caption>
-              <h3>DIFFEREMENT</h3>
+              <Title>DIFFEREMENT</Title>
               <p>
                 BUILT FOR D.LANTINGA &amp; D.SMEDEMAN , CODE/DESIGN, MAY 2019
               </p>
@@ -280,7 +255,7 @@ const dev = function() {
             />
 
             <Caption>
-              <h3>Lexicon of Graphic Design</h3>
+              <Title>Lexicon of Graphic Design</Title>
               <p>
                 BUILT FOR AN ASIGNMENT AT THE GERRIT RIETVELD ACADEMIE,
                 CODE/DESIGN, MAY 2017
@@ -294,6 +269,13 @@ const dev = function() {
 
         <Project>
           <Wrapper>
+            <BgWrapper>
+              <BackgroundSection
+                img={data.drift.childImageSharp.fluid}
+                className="Container-bravo"
+              />
+            </BgWrapper>
+
             <StyledPlayer
               width="100%"
               height="100%"
@@ -305,7 +287,7 @@ const dev = function() {
             />
 
             <Caption>
-              <h3>Festival Drift</h3>
+              <Title>Festival Drift</Title>
               <p>
                 BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
                 D.JASIULEVIČIŪTĖ, APRIL 2019
