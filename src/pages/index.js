@@ -62,20 +62,21 @@ const Container = styled.div`
 
 const MobTextWrapper = styled.div`
   max-width: 60vw;
-  margin: 10rem auto;
-  display: flex;
+  position: absolute;
+  bottom: 2rem;
   align-items: center;
   justify-content: center;
   background-color: silver;
+  opacity: 0.5;
+  transform: translateX(33%);
+  padding: 0.9rem;
+  border-radius: 5rem;
 `
 
 const MobText = styled.div`
-  line-height: 5rem;
-  margin-top: 4rem;
+  line-height: 3.7rem;
   text-align: center;
-  font-size: 4rem;
-  max-width: 110rem;
-  margin: 0 auto;
+  font-size: 2.5rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   z-index: 2;

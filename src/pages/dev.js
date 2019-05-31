@@ -18,11 +18,11 @@ const Header = styled.header`
   font-size: 1.7rem;
   color: inherit;
   text-decoration: none;
-  @media (max-width: 800px) {
+  /* @media (max-width: 800px) {
     position: absolute;
     top: 0;
     left: 0;
-  }
+  } */
 `
 const Homelink = styled(props => <Link {...props} />)`
   text-decoration: none;
@@ -108,6 +108,7 @@ const Caption = styled.figcaption`
   -moz-osx-font-smoothing: grayscale;
   @media (max-width: 800px) {
     margin-bottom: 0;
+    padding: 0.5rem;
   }
 `
 
@@ -296,7 +297,7 @@ const dev = () => {
                 D.JASIULEVIČIŪTĖ, APRIL 2019
               </p>
               <StyledLinks href="http://festivaldrift.com">
-                festivaldrift.com
+                festivaldrift.nl
               </StyledLinks>
             </Caption>
           </Wrapper>
