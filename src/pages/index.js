@@ -7,21 +7,33 @@ import SEO from "../components/seo"
 import "../components/layout.css"
 import styled from "@emotion/styled"
 
-const Header = styled.header`
-  display: flex;
-  position: fixed;
-  box-sizing: border-box;
+// const Header = styled.header`
+//   display: flex;
+//   position: fixed;
+//   box-sizing: border-box;
 
-  justify-content: space-between;
+//   display: flex;
+
+//   background-color: red;
+
+//   justify-content: space-between;
+//   width: 100%;
+//   color: white;
+//   font-size: 2.9rem;
+//   padding: 1.4rem;
+//   mix-blend-mode: hard-light;
+//   user-select: none;
+// `
+const Nav = styled.nav`
+  pointer-events: all;
   width: 100%;
   color: white;
   font-size: 2.9rem;
   padding: 1.4rem;
   mix-blend-mode: hard-light;
   user-select: none;
-`
-const Nav = styled.nav`
-  pointer-events: all;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 `
 
 const StyledLink = styled(props => <Link {...props} />)`
@@ -48,17 +60,27 @@ const Container = styled.div`
   height: 100vh;
 `
 
-// const MobText = styled.div`
-//   line-height: 5rem;
-//   margin-top: 4rem;
-//   text-align: center;
-//   font-size: 4rem;
-//   max-width: 110rem;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   z-index: 2;
-//   pointer-events: none;
-// `
+const MobTextWrapper = styled.div`
+  max-width: 60vw;
+  margin: 10rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: silver;
+`
+
+const MobText = styled.div`
+  line-height: 5rem;
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 4rem;
+  max-width: 110rem;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  z-index: 2;
+  pointer-events: none;
+`
 const Text = styled.div`
   text-align: center;
   font-size: 4rem;
@@ -70,12 +92,9 @@ const Text = styled.div`
 `
 const NavLink = styled(Link)`
   color: black;
-  // background-color: red;
-
   line-height: 1;
   margin: 1rem 0.5rem 0 0;
   padding: 0.55rem;
-
   text-decoration: underline;
   pointer-events: auto;
 `
@@ -154,19 +173,13 @@ export default class IndexPage extends Component {
     if (this.state.mode === "mobile") {
       return (
         <>
-          <h3>
-            Hey,
-            <NavLink to="/">Jurgis</NavLink>
-            Here. I'm a Graphic Designer who does Web Development &amp;
-            Experience Design.
-          </h3>
-          <Header>
-            <Nav>
-              <StyledLink to="/">GD</StyledLink>
-              <StyledLink to="/dev"> </StyledLink>
-              {/* <StyledLink to="/">VIDEO</StyledLink> */}
-            </Nav>
-          </Header>
+          <Nav>
+            <StyledLink to="/dev">Portfolio</StyledLink>
+          </Nav>
+
+          <MobTextWrapper>
+            <MobText>Hey, feel free to look around</MobText>
+          </MobTextWrapper>
           <DungeonComponent />
         </>
       )
