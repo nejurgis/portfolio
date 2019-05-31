@@ -48,17 +48,17 @@ const Container = styled.div`
   height: 100vh;
 `
 
-const MobText = styled.div`
-  line-height: 5rem;
-  margin-top: 4rem;
-  text-align: center;
-  font-size: 4rem;
-  max-width: 110rem;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  z-index: 2;
-  pointer-events: none;
-`
+// const MobText = styled.div`
+//   line-height: 5rem;
+//   margin-top: 4rem;
+//   text-align: center;
+//   font-size: 4rem;
+//   max-width: 110rem;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+//   z-index: 2;
+//   pointer-events: none;
+// `
 const Text = styled.div`
   text-align: center;
   font-size: 4rem;
@@ -79,10 +79,6 @@ const NavLink = styled(Link)`
   text-decoration: underline;
   pointer-events: auto;
 `
-const Clickable = styled.div`
-  z-index: 4;
-  display: inline;
-`
 const DungeonLoading = props => {
   if (props.error) {
     return null
@@ -95,7 +91,7 @@ const DungeonLoading = props => {
   }
 }
 
-const HeaderLoading = props => {
+const CanvasLoading = props => {
   if (props.error) {
     return null
   } else if (props.timedOut) {
@@ -107,11 +103,6 @@ const HeaderLoading = props => {
   }
 }
 
-const HeaderComponent = Loadable({
-  loader: () => import("../components/ThreeHeader"),
-  loading: HeaderLoading,
-})
-
 const DungeonComponent = Loadable({
   loader: () => import("../components/DungeonComponent"),
   loading: DungeonLoading,
@@ -119,7 +110,7 @@ const DungeonComponent = Loadable({
 
 const CanvasComponent = Loadable({
   loader: () => import("../components/CanvasComponent"),
-  loading: DungeonLoading,
+  loading: CanvasLoading,
 })
 
 export default class IndexPage extends Component {
@@ -163,16 +154,12 @@ export default class IndexPage extends Component {
     if (this.state.mode === "mobile") {
       return (
         <>
-          {/* <MobText>
-            <h3>
-              Hey,
-              <Clickable> </Clickable>
-              <NavLink to="/">Jurgis</NavLink>
-              Here. I'm a Graphic Designer who does Web Development &amp;
-              Experience Design.
-            </h3>
-          </MobText> */}
-          {/* <HeaderComponent /> */}
+          <h3>
+            Hey,
+            <NavLink to="/">Jurgis</NavLink>
+            Here. I'm a Graphic Designer who does Web Development &amp;
+            Experience Design.
+          </h3>
           <Header>
             <Nav>
               <StyledLink to="/">GD</StyledLink>
@@ -199,10 +186,9 @@ export default class IndexPage extends Component {
             <Text>
               <h1 ref={this.selector}>
                 <p id="text" />
-                Hey,
-                <NavLink to="/">Jurgis</NavLink>
-                Here. I'm a <NavLink to="/dev/">Web Developer</NavLink>who does
-                Graphic Design.
+                Hey, Jurgis Here. I'm a{" "}
+                <NavLink to="/dev/">Web Developer</NavLink>who does Graphic
+                Design.
               </h1>
             </Text>
           </Container>

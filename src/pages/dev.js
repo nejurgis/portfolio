@@ -66,7 +66,7 @@ const Navlink = styled.a`
 
 const Container = styled.div`
   max-width: 100vw;
-  padding: 20rem;
+  padding: 15.5rem;
   margin: 0 auto;
 
   @media (max-width: 800px) {

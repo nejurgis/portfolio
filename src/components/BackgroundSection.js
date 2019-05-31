@@ -8,8 +8,8 @@ const BackgroundSection = ({ img }) => {
         zIndex: "-1",
         height: "45vh",
         backgroundPosition: "center center",
-        backgroundRepeat: "repeat-y",
-        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
       }}
       fluid={img}
       className="bg"
