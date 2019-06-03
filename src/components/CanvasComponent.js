@@ -7,6 +7,12 @@ import debounce from "lodash/debounce"
 const url = "https://jurgioserveris.herokuapp.com/"
 // const url = "localhost:3000"
 console.log("went inside of canvas")
+if (typeof window !== `undefined`) {
+  if (window.innerWidth > 700) {
+    console.log("window width:", window.innerWidth)
+  }
+}
+console.log("bigger than that")
 const socket = io.connect(url)
 
 let frame, heatmap

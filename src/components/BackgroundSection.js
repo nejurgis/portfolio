@@ -6,10 +6,13 @@ const BackgroundSection = ({ img }) => {
     <BackgroundImage
       style={{
         zIndex: "-1",
-        height: "45vh",
+        height: "70vh",
+        width: "66vw",
+        margin: "0 auto",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        boxShadow: "0 0 30px black",
       }}
       fluid={img}
       className="bg"

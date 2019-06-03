@@ -25,6 +25,7 @@ import styled from "@emotion/styled"
 //   user-select: none;
 // `
 const Nav = styled.nav`
+  user-select: none;
   pointer-events: all;
   width: 100%;
   color: white;
@@ -37,6 +38,7 @@ const Nav = styled.nav`
 `
 
 const StyledLink = styled(props => <Link {...props} />)`
+  user-select: none;
   margin-left: 1.6rem;
   color: black;
   text-decoration: none;
@@ -74,7 +76,7 @@ const MobTextWrapper = styled.div`
 `
 
 const MobText = styled.div`
-  line-height: 3.7rem;
+  line-height: 2rem;
   text-align: center;
   font-size: 2.5rem;
   -webkit-font-smoothing: antialiased;
@@ -146,8 +148,10 @@ export default class IndexPage extends Component {
       this.setState({ width: window.innerWidth })
       if (window.innerWidth <= 600) {
         this.setState({ mode: "mobile" })
+        console.log("mobile")
       } else {
         this.setState({ mode: "desktop" })
+        console.log("desktop")
       }
     }
   }
@@ -172,16 +176,19 @@ export default class IndexPage extends Component {
 
   renderDungeon = () => {
     if (this.state.mode === "mobile") {
+      console.log("mobile!")
       return (
         <>
           <Nav>
-            <StyledLink to="/dev">Portfolio</StyledLink>
+            <StyledLink draggable="false" to="/dev">
+              Portfolio
+            </StyledLink>
           </Nav>
 
           <MobTextWrapper>
             <MobText>Hey, feel free to look around</MobText>
           </MobTextWrapper>
-          <DungeonComponent />
+          <DungeonComponent draggable="false" />
         </>
       )
     } else {
@@ -191,6 +198,7 @@ export default class IndexPage extends Component {
 
   renderDesktop = () => {
     if (this.state.mode === "desktop") {
+      console.log("CALLING THE SOCKET!")
       return (
         <>
           <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />

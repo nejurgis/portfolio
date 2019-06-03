@@ -227,6 +227,10 @@ export function onResize({ width, height }) {
   if (renderer) renderer.setSize(width, height)
 }
 
+function noMove(e) {
+  e.preventDefault()
+}
+
 function onRender() {
   orbit.rotation.y += 0.5e-4
   orbit2.rotation.y -= 0.5e-4
@@ -329,6 +333,7 @@ class IntroScene extends React.Component {
   }
 
   componentDidMount() {
+    document.addEventListener("touchmove", noMove, { passive: false })
     setRenderer({ canvas: this.animationRoot.current })
     initScene()
     window.addEventListener("resize", this.onResize)
@@ -342,6 +347,7 @@ class IntroScene extends React.Component {
 
   componentWillUnmount() {
     console.log("scene:", scene)
+    window.removeEventListener("touchstart", noMove)
     window.removeEventListener("resize", this.onResize)
     window.removeEventListener("mousedown", handleDown)
     window.removeEventListener("touchstart", handleDown)
