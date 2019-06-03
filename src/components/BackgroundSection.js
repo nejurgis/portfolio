@@ -6,8 +6,9 @@ const BackgroundSection = ({ img }) => {
     <BackgroundImage
       style={{
         zIndex: "-1",
-        height: "70vh",
-        width: "66vw",
+        height: "0",
+        width: "75%",
+        paddingTop: "133%",
         margin: "0 auto",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",

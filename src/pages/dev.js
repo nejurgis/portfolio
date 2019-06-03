@@ -45,9 +45,9 @@ const BgWrapper = styled.div`
   > .bg {
     display: none;
     @media (max-width: 800px) {
-      display: block;
+      display: flex;
       margin: 0;
-      padding-top: calc(984 / 1528 * 100%);
+      /* padding-top: calc(984 / 1528 * 100%); */
     }
   }
 `
