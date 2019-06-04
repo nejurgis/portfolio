@@ -333,7 +333,7 @@ class IntroScene extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener("touchmove", noMove, { passive: false })
+    // document.addEventListener("touchmove", noMove, { passive: false })
     setRenderer({ canvas: this.animationRoot.current })
     initScene()
     window.addEventListener("resize", this.onResize)
