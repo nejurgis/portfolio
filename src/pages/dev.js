@@ -5,6 +5,7 @@ import drift from "../assets/drift.webm"
 import lexicon from "../assets/lexicon.webm"
 import diff from "../assets/diff.webm"
 import ReactPlayer from "react-player"
+import ReactTooltip from "react-tooltip"
 
 import { Link, graphql, useStaticQuery } from "gatsby"
 import BackgroundSection from "../components/BackgroundSection"
@@ -24,6 +25,15 @@ const Header = styled.header`
     left: 0;
   } */
 `
+
+const Tooltip = styled.span`
+  z-index: 9999;
+  width: 5rem;
+  > * {
+    font-size: 3rem;
+  }
+`
+
 const Homelink = styled(props => <Link {...props} />)`
   text-decoration: none;
   color: black;
@@ -65,7 +75,7 @@ const Navlink = styled.a`
 `
 
 const Container = styled.div`
-  max-width: 100vw;
+  max-width: 90vw;
   padding: 15.5rem;
   margin: 0 auto;
 
@@ -124,7 +134,7 @@ const StyledPlayer = styled(props => <ReactPlayer {...props} />)`
   user-select: none; /* Likely future */
   margin: 0 auto;
   box-shadow: 0 0 30px black;
-  z-index: 1;
+
   background-color: black;
 
   @media (max-width: 800px) {
@@ -183,8 +193,14 @@ const dev = () => {
         </Navlink>
       </Header>
       <Container>
+        <ReactTooltip id="tizianaWeb">
+          <p>
+            This was a website for Tiziana,
+            <br /> she was tired of all the 'flat' photography websites
+          </p>
+        </ReactTooltip>
         <Project>
-          <Wrapper>
+          <Tooltip data-tip data-for="tizianaWeb">
             <BgWrapper>
               <BackgroundSection
                 img={data.tiziana.childImageSharp.fluid}
@@ -193,26 +209,32 @@ const dev = () => {
             </BgWrapper>
 
             <StyledPlayer
-              width="100%"
-              height="100%"
+              width="90%"
+              height="90%"
               url={vid}
               playing
               loop={true}
               preload="true"
               controls
             />
+          </Tooltip>
 
-            <Caption>
-              <Title>TIZIANA KRÜGER</Title>
-              <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
-              <StyledLinks href="http://tizianakruger.com">
-                tizianakruger.com
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
+          <Caption>
+            <Title>TIZIANA KRÜGER</Title>
+            <p>BUILT FOR T.KRÜGER, CODE/DESIGN, JULY 2017</p>
+            <StyledLinks href="http://tizianakruger.com" target="_blank">
+              tizianakruger.com
+            </StyledLinks>
+          </Caption>
         </Project>
+        <ReactTooltip id="differementWeb">
+          <p>
+            This was a website for Dave and Daniel, <br /> they're running a
+            fashion blog and I coded this with a <br /> <br /> Kirby CMS (php).
+          </p>
+        </ReactTooltip>
         <Project>
-          <Wrapper>
+          <Tooltip data-tip data-for="differementWeb">
             <BgWrapper>
               <BackgroundSection
                 img={data.differement.childImageSharp.fluid}
@@ -221,58 +243,73 @@ const dev = () => {
             </BgWrapper>
 
             <StyledPlayer
-              width="100%"
-              height="100%"
+              width="90%"
+              height="90%"
               url={diff}
               playing
               loop={true}
               preload="true"
               controls
             />
+          </Tooltip>
 
-            <Caption>
-              <Title>DIFFEREMENT</Title>
-              <p>
-                BUILT FOR D.LANTINGA &amp; D.SMEDEMAN , CODE/DESIGN, MAY 2019
-              </p>
-              <p>not online yet</p>
-            </Caption>
-          </Wrapper>
+          <Caption>
+            <Title>DIFFEREMENT</Title>
+            <p>BUILT FOR D.LANTINGA &amp; D.SMEDEMAN , CODE/DESIGN, MAY 2019</p>
+            <p>not online yet</p>
+          </Caption>
         </Project>
 
+        <ReactTooltip id="lexiconWeb">
+          <p>
+            This was one of the first websites I ever made. <br /> Elastic
+            Search library helped to make the search fast and snappy <br />
+            <br />
+            Elastic Search
+          </p>
+        </ReactTooltip>
         <Project>
-          <Wrapper>
+          <Tooltip data-tip data-for="lexiconWeb" target="_blank">
             <BgWrapper>
               <BackgroundSection
                 img={data.lexicon.childImageSharp.fluid}
                 className="Container-bravo"
               />
             </BgWrapper>
+
             <StyledPlayer
-              width="100%"
-              height="100%"
+              width="90%"
+              height="90%"
               url={lexicon}
               playing
               loop={true}
               preload="true"
               // controls
             />
-
-            <Caption>
-              <Title>Lexicon of Graphic Design</Title>
-              <p>
-                BUILT FOR AN ASIGNMENT AT THE GERRIT RIETVELD ACADEMIE,
-                CODE/DESIGN, MAY 2017
-              </p>
-              <StyledLinks href="http://lexicon.surge.sh">
-                lexicon.surge.sh
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
+          </Tooltip>
+          <Caption>
+            <Title>Lexicon of Graphic Design</Title>
+            <p>
+              BUILT FOR AN ASIGNMENT AT THE GERRIT RIETVELD ACADEMIE,
+              CODE/DESIGN, MAY 2017
+            </p>
+            <StyledLinks href="http://lexicon.surge.sh" target="_blank">
+              lexicon.surge.sh
+            </StyledLinks>
+          </Caption>
         </Project>
 
+        <ReactTooltip id="driftWeb">
+          <p>
+            This was my experience in working with Wordpress.
+            <br /> Not a fan of it, but it gets the job done (quickly)
+            <br />
+            <br />
+            Wordpress
+          </p>
+        </ReactTooltip>
         <Project>
-          <Wrapper>
+          <Tooltip data-tip data-for="driftWeb">
             <BgWrapper>
               <BackgroundSection
                 img={data.drift.childImageSharp.fluid}
@@ -281,26 +318,25 @@ const dev = () => {
             </BgWrapper>
 
             <StyledPlayer
-              width="100%"
-              height="100%"
+              width="90%"
+              height="90%"
               url={drift}
               playing
               loop={true}
               preload="true"
               controls
             />
-
-            <Caption>
-              <Title>Festival Drift</Title>
-              <p>
-                BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
-                D.JASIULEVIČIŪTĖ, APRIL 2019
-              </p>
-              <StyledLinks href="http://festivaldrift.com">
-                festivaldrift.nl
-              </StyledLinks>
-            </Caption>
-          </Wrapper>
+          </Tooltip>
+          <Caption>
+            <Title>Festival Drift</Title>
+            <p>
+              BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
+              D.JASIULEVIČIŪTĖ, APRIL 2019
+            </p>
+            <StyledLinks href="http://festivaldrift.nl" target="_blank">
+              festivaldrift.nl
+            </StyledLinks>
+          </Caption>
         </Project>
       </Container>
     </>

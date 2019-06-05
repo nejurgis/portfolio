@@ -100,6 +100,13 @@ const NavLink = styled(Link)`
   padding: 0.55rem;
   text-decoration: underline;
   pointer-events: auto;
+  transition: color 0.35s ease;
+
+  &:hover {
+    text-decoration: underline;
+    color: grey;
+    /* background-color: blue; */
+  }
 `
 const DungeonLoading = props => {
   if (props.error) {
