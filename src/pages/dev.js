@@ -9,6 +9,7 @@ import ReactTooltip from "react-tooltip"
 
 import { Link, graphql, useStaticQuery } from "gatsby"
 import BackgroundSection from "../components/BackgroundSection"
+import Layout from "../components/layout"
 // Styles disappear on reload
 
 const Header = styled.header`
@@ -95,16 +96,6 @@ const Project = styled.section`
 
   @media (max-width: 800px) {
     padding: 0 0 0.5rem 0;
-  }
-`
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 2rem;
-  width: auto;
-  height: auto;
-  @media (max-width: 800px) {
-    margin: 0;
   }
 `
 
@@ -284,7 +275,7 @@ const dev = () => {
               playing
               loop={true}
               preload="true"
-              // controls
+              controls
             />
           </Tooltip>
           <Caption>
@@ -327,16 +318,18 @@ const dev = () => {
               controls
             />
           </Tooltip>
-          <Caption>
-            <Title>Festival Drift</Title>
-            <p>
-              BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
-              D.JASIULEVIČIŪTĖ, APRIL 2019
-            </p>
-            <StyledLinks href="http://festivaldrift.nl" target="_blank">
-              festivaldrift.nl
-            </StyledLinks>
-          </Caption>
+          <Layout>
+            <Caption>
+              <Title>Festival Drift</Title>
+              <p>
+                BUILT FOR FESTIVAL DRIFT, DESIGNED TOGETHER WITH W.JANG AND
+                D.JASIULEVIČIŪTĖ, APRIL 2019
+              </p>
+              <StyledLinks href="http://festivaldrift.nl" target="_blank">
+                festivaldrift.nl
+              </StyledLinks>
+            </Caption>
+          </Layout>
         </Project>
       </Container>
     </>

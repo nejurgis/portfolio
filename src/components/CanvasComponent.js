@@ -236,7 +236,7 @@ export default class CanvasComponent extends Component {
     let y = e.pageY
 
     heatmap.add([x, y, 1])
-    // socket.emit("hell", [x, y, 1])
+    socket.emit("hell", [x, y, 1])
 
     if (heatmap._data.length > this.state.maxlength) {
       heatmap._data.shift()

@@ -1,30 +1,26 @@
 import React from "react"
 import { Global, css } from "@emotion/core"
+import styled from "@emotion/styled"
 
-const Layout = ({ children }) => (
-  <>
+const Wrapper = styled("div")`
+  border: 2px solid green;
+  padding: 10px;
+`
+
+export default ({ children }) => (
+  <Wrapper>
     <Global
       styles={css`
-        * {
-          box-sizing: border-box;
-          margin: 0;
-        }
-
-        html,
-        body {
-          margin: 0;
-          color: #555;
+        div {
           font-family: "OSwald", sans-serif;
-          font-size: 10px;
-          line-height: 1.4;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
-          background-color: silver;
+          /* background: red; */
+          /* color: white; */
+          margin: 0;
         }
       `}
     />
     {children}
-  </>
+  </Wrapper>
 )
-
-export default Layout
