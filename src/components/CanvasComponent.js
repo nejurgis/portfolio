@@ -1,11 +1,12 @@
 import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
+import styled from "@emotion/styled"
 
 import debounce from "lodash/debounce"
 
-const url = "https://jurgioserveris.herokuapp.com/"
-// const url = "localhost:3000"
+// const url = "https://jurgioserveris.herokuapp.com/"
+const url = "localhost:3000"
 console.log("went inside of canvas")
 if (typeof window !== `undefined`) {
   if (window.innerWidth > 700) {
@@ -34,6 +35,18 @@ const itemStyle = {
   pointerEvents: "none",
 }
 
+const OnlineIndicator = styled.h1`
+  background-color: blue;
+  color: red;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`
+
+const User = styled.span`
+  font-size: 1.5rem;
+`
+
 export default class CanvasComponent extends Component {
   constructor(props) {
     super(props)
@@ -51,6 +64,8 @@ export default class CanvasComponent extends Component {
       r2: 15,
       maxlength: 350,
       url: "localhost:3000",
+      isMoving: false,
+      userName: "",
     }
     this.onResize = debounce(this._onResize, 200).bind(this)
     this.heatSpace = React.createRef()
@@ -97,7 +112,7 @@ export default class CanvasComponent extends Component {
   componentDidMount() {
     socket.emit("load history")
     console.log("mounted canvas")
-
+    this.manualSocketConnect()
     console.log("check 1", socket.connected)
     if (socket.connected === false) {
       // io.connect(url)
@@ -107,9 +122,9 @@ export default class CanvasComponent extends Component {
       console.log("went into socket check")
     }
 
-    socket.on("connect", function() {
-      console.log("check 2", socket.connected)
-    })
+    // socket.on("connect", function() {
+    //   console.log("check 2", socket.connected)
+    // })
 
     window.requestAnimationFrame =
       window.requestAnimationFrame ||
@@ -135,8 +150,19 @@ export default class CanvasComponent extends Component {
 
       window.requestAnimationFrame(this.draw)
     })
+
+    socket.on("moving", data => {
+      this.setState({ userName: data })
+      this.setState({ isMoving: true })
+    })
+
+    socket.on("notMoving", () => {
+      this.setState({ isMoving: false })
+    })
     socket.on("livestream", coordinate => {
       heatmap.add(coordinate)
+
+      // this.setState({ isTyping: true })
       // console.log("heatmap data length:", heatmap._data.length)
 
       if (heatmap._data.length > 5000) {
@@ -196,12 +222,14 @@ export default class CanvasComponent extends Component {
   }
 
   manualSocketConnect = () => {
+    // const socket = io.connect(url)
     socket.emit("connection", socket.id)
     console.log("socket.id:", socket.id)
   }
 
   manualSocketDisconnect = () => {
     socket.emit("manual-disconnection", socket.id)
+    socket.emit("disconnect")
     socket.close()
     console.log("Socket Closed. ")
   }
@@ -229,9 +257,19 @@ export default class CanvasComponent extends Component {
   //   // let depth = window.devicePixelRatio
   //   // let displayWidth = Math.floor()
   // }
+  mouseMoveStopped = () => {
+    socket.emit("notMoving")
+  }
 
   collectMouseData = e => {
     e.preventDefault()
+    socket.emit("moving")
+
+    let timeout
+    ;(() => {
+      clearTimeout(timeout)
+      timeout = setTimeout(this.mouseMoveStopped, 2000)
+    })()
     let x = e.pageX
     let y = e.pageY
 
@@ -246,14 +284,23 @@ export default class CanvasComponent extends Component {
   }
 
   render() {
+    // isTyping = false
     if (typeof window !== `undefined`) {
       return (
-        <canvas
-          style={itemStyle}
-          ref={this.heatSpace}
-          width={window.innerWidth}
-          height={window.innerHeight}
-        />
+        <>
+          {this.state.isMoving ? (
+            <OnlineIndicator>
+              UserID: <User>{this.state.userName}</User> is drawing...
+            </OnlineIndicator>
+          ) : null}
+
+          <canvas
+            style={itemStyle}
+            ref={this.heatSpace}
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
+        </>
       )
     } else {
       return <canvas />
