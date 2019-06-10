@@ -5,8 +5,8 @@ import styled from "@emotion/styled"
 
 import debounce from "lodash/debounce"
 
-// const url = "https://jurgioserveris.herokuapp.com/"
-const url = "localhost:3000"
+const url = "https://jurgioserveris.herokuapp.com/"
+// const url = "localhost:3000"
 console.log("went inside of canvas")
 if (typeof window !== `undefined`) {
   if (window.innerWidth > 700) {
