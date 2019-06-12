@@ -8,7 +8,6 @@ import ima from "../assets/Selected_Poster.png"
 import hen from "../assets/hen.jpg"
 import selText from "../assets/selText.png"
 import { withStyles } from "@material-ui/core"
-import CanvasComponent from "../components/CanvasComponent"
 import { navigate } from "@reach/router"
 
 const styles = {

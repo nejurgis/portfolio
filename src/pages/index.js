@@ -26,13 +26,17 @@ import styled from "@emotion/styled"
 // `
 const Nav = styled.nav`
   user-select: none;
+  position: fixed;
   pointer-events: all;
+  max-height: 100%;
   width: 100%;
   color: white;
   font-size: 2.9rem;
   padding: 1.4rem;
   mix-blend-mode: hard-light;
   user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `
@@ -41,12 +45,18 @@ const StyledLink = styled(props => <Link {...props} />)`
   user-select: none;
   margin-left: 1.6rem;
   color: black;
+
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   &:visited {
     text-decoration: none;
+  }
+  &:active {
+    text-decoration: underline;
+    color: red;
+    background-color: blue;
   }
   &:focus {
     text-decoration: none;
@@ -64,7 +74,8 @@ const Container = styled.div`
 
 const MobTextWrapper = styled.div`
   max-width: 60vw;
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
   bottom: 2rem;
   align-items: center;
   justify-content: center;
@@ -79,6 +90,7 @@ const MobText = styled.div`
   line-height: 2rem;
   text-align: center;
   font-size: 2.5rem;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   z-index: 2;
@@ -150,6 +162,13 @@ export default class IndexPage extends Component {
 
   componentDidMount() {
     window.addEventListener("resize", this.handleWindowSizeChange)
+    // window.addEventListener(
+    //   "touchmove",
+    //   function(e) {
+    //     e.preventDefault()
+    //   },
+    //   { passive: false }
+    // )
 
     if (typeof window !== "undefined") {
       this.setState({ width: window.innerWidth })

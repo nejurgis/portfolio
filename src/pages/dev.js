@@ -44,6 +44,11 @@ const Homelink = styled(props => <Link {...props} />)`
     color: red;
     background-color: blue;
   }
+  &:active {
+    text-decoration: underline;
+    color: red;
+    background-color: blue;
+  }
 `
 const Title = styled.h3`
   -webkit-font-smoothing: antialiased;
@@ -93,6 +98,8 @@ const Project = styled.section`
 
   @media (max-width: 800px) {
     padding: 0 0 0.5rem 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
   }
 `
 
