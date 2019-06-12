@@ -27,6 +27,7 @@ const styles = {
 }
 
 let playing = false
+let isTouchMove = false
 let renderer,
   scene,
   camera,
@@ -43,10 +44,14 @@ let renderer,
   raycaster,
   mouse3D,
   clickedItem,
-  pos
+  pos,
+  lastPageX,
+  deltaPageX,
+  offsetRotation
 
 const initScene = function() {
   scene = new THREE.Scene()
+  offsetRotation = new THREE.Quaternion()
 
   raycaster = new THREE.Raycaster()
   mouse3D = new THREE.Vector3()
@@ -240,7 +245,10 @@ function onRender() {
   mesh2.lookAt(camera.position)
   mesh3.lookAt(camera.position)
   mesh4.lookAt(camera.position)
-  controls.update()
+  if (!isTouchMove) {
+    controls.update()
+  }
+  camera.quaternion.premultiply(offsetRotation)
   renderer.render(scene, camera)
 }
 
@@ -273,6 +281,15 @@ const checkIntersects = function(e) {
   raycaster.setFromCamera(mouse3D, camera)
 
   return raycaster.intersectObjects(scene.children, true)
+}
+
+const handleTouchmove = function(e) {
+  offsetRotation.premultiply(
+    new THREE.Quaternion().setFromAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      2.2 * 0.007
+    )
+  )
 }
 
 const handleDown = function(e) {
@@ -337,6 +354,23 @@ class IntroScene extends React.Component {
     setRenderer({ canvas: this.animationRoot.current })
     initScene()
     window.addEventListener("resize", this.onResize)
+    window.addEventListener("touchmove", handleTouchmove, false)
+    window.addEventListener(
+      "touchstart",
+      e => {
+        isTouchMove = false
+        lastPageX = e.pageX
+      },
+      false
+    )
+    window.addEventListener(
+      "touchend",
+      e => {
+        isTouchMove = false
+        controls.enabled = true
+      },
+      false
+    )
 
     window.addEventListener("mousedown", handleDown, false)
 

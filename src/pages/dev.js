@@ -6,6 +6,7 @@ import lexicon from "../assets/lexicon.webm"
 import diff from "../assets/diff.webm"
 import ReactPlayer from "react-player"
 import ReactTooltip from "react-tooltip"
+// import ReactTooltip from "../components/Tooltip.js"
 
 import { Link, graphql, useStaticQuery } from "gatsby"
 import BackgroundSection from "../components/BackgroundSection"
@@ -20,15 +21,11 @@ const Header = styled.header`
   font-size: 1.7rem;
   color: inherit;
   text-decoration: none;
-  /* @media (max-width: 800px) {
-    position: absolute;
-    top: 0;
-    left: 0;
-  } */
 `
 
 const Tooltip = styled.span`
   z-index: 9999;
+  background-color: red;
   width: 5rem;
   > * {
     font-size: 3rem;

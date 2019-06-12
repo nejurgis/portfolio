@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import * as simpleheat from "simpleheat"
 import io from "socket.io-client"
 import styled from "@emotion/styled"
+// import Stats from "react-canvas-stats"
 
 import debounce from "lodash/debounce"
 
@@ -66,6 +67,21 @@ export default class CanvasComponent extends Component {
       url: "localhost:3000",
       isMoving: false,
       userName: "",
+      timestamp: null,
+    }
+    const memory = window.performance && window.performance.memory
+
+    if (memory) {
+      this._extraPanels = [
+        {
+          name: "MB",
+          fg: "#f08",
+          bg: "#201",
+          maxValue: memory.jsHeapSizeLimit / 1048576, //you have to provide this for scale
+          updateOnType: "fps", //this feels a bit clunky, there are two update types
+          updateCallback: val => memory.usedJSHeapSize / 1048576, //a function to transform the value (you dont have to you can also just compute whatever you want), val input val output
+        },
+      ]
     }
     this.onResize = debounce(this._onResize, 200).bind(this)
     this.heatSpace = React.createRef()
@@ -258,18 +274,19 @@ export default class CanvasComponent extends Component {
   //   // let displayWidth = Math.floor()
   // }
   mouseMoveStopped = () => {
-    socket.emit("notMoving")
+    // socket.emit("notMoving")
   }
 
   collectMouseData = e => {
     e.preventDefault()
-    socket.emit("moving")
+    // socket.emit("moving")
+    this.setState({ timestamp: Date.now() })
 
-    let timeout
-    ;(() => {
-      clearTimeout(timeout)
-      timeout = setTimeout(this.mouseMoveStopped, 2000)
-    })()
+    // let timeout
+    // ;(() => {
+    //   clearTimeout(timeout)
+    //   timeout = setTimeout(this.mouseMoveStopped, 2000)
+    // })()
     let x = e.pageX
     let y = e.pageY
 
@@ -288,6 +305,10 @@ export default class CanvasComponent extends Component {
     if (typeof window !== `undefined`) {
       return (
         <>
+          {/* <Stats
+            timestamp={this.state.timestamp}
+            extraPanels={this._extraPanels}
+          /> */}
           {this.state.isMoving ? (
             <OnlineIndicator>
               UserID: <User>{this.state.userName}</User> is drawing...
