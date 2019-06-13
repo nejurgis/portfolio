@@ -280,7 +280,8 @@ export default class CanvasComponent extends Component {
   collectMouseData = e => {
     e.preventDefault()
     // socket.emit("moving")
-    this.setState({ timestamp: Date.now() })
+
+    // this.setState({ timestamp: Date.now() })
 
     // let timeout
     // ;(() => {
