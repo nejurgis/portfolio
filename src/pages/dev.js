@@ -16,7 +16,7 @@ import BackgroundSection from "../components/BackgroundSection"
 
 const Header = styled.header`
   position: fixed;
-  /* font-family: "OSwald", sans-serif; */
+  font-family: "OSwald", sans-serif;
   top: 0;
   left: 0;
   padding: 2rem;
