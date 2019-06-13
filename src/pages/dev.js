@@ -1,6 +1,6 @@
 import React from "react"
-import styled from "@emotion/styled"
 import Layout from "../components/layout"
+import styled from "@emotion/styled"
 import vid from "../assets/vid.webm"
 import drift from "../assets/drift.webm"
 import lexicon from "../assets/lexicon.webm"
@@ -16,6 +16,7 @@ import BackgroundSection from "../components/BackgroundSection"
 
 const Header = styled.header`
   position: fixed;
+  /* font-family: "OSwald", sans-serif; */
   top: 0;
   left: 0;
   padding: 2rem;

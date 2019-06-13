@@ -1,11 +1,11 @@
 import React, { Component } from "react"
+import styled from "@emotion/styled"
 import { Link } from "gatsby"
 import Loadable from "react-loadable"
 import "../components/main.css"
 
 import SEO from "../components/seo"
 import "../components/layout.css"
-import styled from "@emotion/styled"
 
 // const Header = styled.header`
 //   display: flex;

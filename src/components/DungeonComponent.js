@@ -1,4 +1,5 @@
 import React from "react"
+import { withStyles } from "@material-ui/core"
 import * as THREE from "three"
 import debounce from "lodash/debounce"
 import DeviceOrientationController from "../lib/DeviceOrientationController"
@@ -7,7 +8,6 @@ import henText from "../assets/henText.png"
 import ima from "../assets/Selected_Poster.png"
 import hen from "../assets/hen.jpg"
 import selText from "../assets/selText.png"
-import { withStyles } from "@material-ui/core"
 import { navigate } from "@reach/router"
 
 const styles = {
