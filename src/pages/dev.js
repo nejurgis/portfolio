@@ -6,8 +6,9 @@ import drift from "../assets/drift.webm"
 import lexicon from "../assets/lexicon.webm"
 import diff from "../assets/diff.webm"
 import ReactPlayer from "react-player"
-import ReactTooltip from "react-tooltip"
-// import ReactTooltip from "../components/Tooltip.js"
+
+import "react-tippy/dist/tippy.css"
+import { Tooltip } from "react-tippy"
 
 import { Link, graphql, useStaticQuery } from "gatsby"
 import BackgroundSection from "../components/BackgroundSection"
@@ -25,12 +26,22 @@ const Header = styled.header`
   text-decoration: none;
 `
 
-const Tooltip = styled.span`
+const Pop = styled.span`
   z-index: 9999;
   background-color: red;
   width: 5rem;
   > * {
     font-size: 3rem;
+  }
+`
+const PurpleTippy = styled(Tippy)`
+  background: purple;
+
+  /* Styling the arrow for different placements */
+  &[x-placement^="top"] {
+    .tippy-arrow {
+      border-top-color: purple;
+    }
   }
 `
 
@@ -191,14 +202,17 @@ const dev = () => {
           </Navlink>
         </Header>
         <Container>
-          <ReactTooltip id="tizianaWeb">
-            <p>
-              This was a website for Tiziana,
-              <br /> she was tired of all the 'flat' photography websites
-            </p>
-          </ReactTooltip>
           <Project>
-            <Tooltip data-tip data-for="tizianaWeb">
+            <PurpleTippy
+              // options
+              title="This was a website for Tiziana,
+              she was tired of all the 'flat' photography websites"
+              position="bottom"
+              trigger="mouseenter"
+              size="big"
+              touchHold="true"
+              followCursor="true"
+            >
               <BgWrapper>
                 <BackgroundSection
                   img={data.tiziana.childImageSharp.fluid}
@@ -215,7 +229,7 @@ const dev = () => {
                 preload="true"
                 controls
               />
-            </Tooltip>
+            </PurpleTippy>
 
             <Caption>
               <Title>TIZIANA KRÜGER</Title>
@@ -225,15 +239,19 @@ const dev = () => {
               </StyledLinks>
             </Caption>
           </Project>
-          <ReactTooltip id="differementWeb">
-            <p>
-              This was a website for Dave and Daniel, <br /> they're running a
-              fashion blog and I coded this with a <br /> <br /> Kirby CMS
-              (php).
-            </p>
-          </ReactTooltip>
+
           <Project>
-            <Tooltip data-tip data-for="differementWeb">
+            <Tooltip
+              // options
+              title="This was a website for Dave and Daniel, <br /> they're running a
+              fashion blog and I coded this with a <br /> <br /> Kirby CMS
+              (php)."
+              position="bottom"
+              trigger="mouseenter"
+              size="big"
+              followCursor="true"
+              touchHold="true"
+            >
               <BgWrapper>
                 <BackgroundSection
                   img={data.differement.childImageSharp.fluid}
@@ -261,16 +279,19 @@ const dev = () => {
             </Caption>
           </Project>
 
-          <ReactTooltip id="lexiconWeb">
-            <p>
-              This was one of the first websites I ever made. <br /> Elastic
+          <Project>
+            <Tooltip
+              // options
+              title="This was one of the first websites I ever made. <br /> Elastic
               Search library helped to make the search fast and snappy <br />
               <br />
-              Elastic Search
-            </p>
-          </ReactTooltip>
-          <Project>
-            <Tooltip data-tip data-for="lexiconWeb" target="_blank">
+              Elastic Search"
+              position="bottom"
+              trigger="mouseenter"
+              size="big"
+              followCursor="true"
+              touchHold="true"
+            >
               <BgWrapper>
                 <BackgroundSection
                   img={data.lexicon.childImageSharp.fluid}
@@ -288,6 +309,7 @@ const dev = () => {
                 controls
               />
             </Tooltip>
+
             <Caption>
               <Title>Lexicon of Graphic Design</Title>
               <p>
@@ -300,17 +322,20 @@ const dev = () => {
             </Caption>
           </Project>
 
-          <ReactTooltip id="driftWeb">
-            <p>
-              This was my experience in working with Wordpress.
+          <Project>
+            <Tooltip
+              // options
+              title="This was my experience in working with Wordpress.
               <br /> Not a fan of it, but it gets the job done (quickly)
               <br />
               <br />
-              Wordpress
-            </p>
-          </ReactTooltip>
-          <Project>
-            <Tooltip data-tip data-for="driftWeb">
+              Wordpress"
+              position="bottom"
+              trigger="mouseenter"
+              size="big"
+              followCursor="true"
+              touchHold="true"
+            >
               <BgWrapper>
                 <BackgroundSection
                   img={data.drift.childImageSharp.fluid}
