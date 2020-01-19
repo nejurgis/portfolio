@@ -34,7 +34,7 @@ const Pop = styled.span`
     font-size: 3rem;
   }
 `
-const PurpleTippy = styled(Tippy)`
+const PurpleTippy = styled(Tooltip)`
   background: purple;
 
   /* Styling the arrow for different placements */
@@ -211,7 +211,7 @@ const dev = () => {
               trigger="mouseenter"
               size="big"
               touchHold="true"
-              followCursor="true"
+              // followCursor="true"
             >
               <BgWrapper>
                 <BackgroundSection
@@ -249,7 +249,7 @@ const dev = () => {
               position="bottom"
               trigger="mouseenter"
               size="big"
-              followCursor="true"
+              // followCursor="true"
               touchHold="true"
             >
               <BgWrapper>
@@ -281,6 +281,7 @@ const dev = () => {
 
           <Project>
             <Tooltip
+              theme="light"
               // options
               title="This was one of the first websites I ever made. <br /> Elastic
               Search library helped to make the search fast and snappy <br />
@@ -289,7 +290,7 @@ const dev = () => {
               position="bottom"
               trigger="mouseenter"
               size="big"
-              followCursor="true"
+              // followCursor="true"
               touchHold="true"
             >
               <BgWrapper>
@@ -333,7 +334,7 @@ const dev = () => {
               position="bottom"
               trigger="mouseenter"
               size="big"
-              followCursor="true"
+              // followCursor="true"
               touchHold="true"
             >
               <BgWrapper>
