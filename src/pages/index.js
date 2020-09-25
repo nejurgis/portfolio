@@ -7,23 +7,6 @@ import "../components/main.css"
 import SEO from "../components/seo"
 import "../components/layout.css"
 
-// const Header = styled.header`
-//   display: flex;
-//   position: fixed;
-//   box-sizing: border-box;
-
-//   display: flex;
-
-//   background-color: red;
-
-//   justify-content: space-between;
-//   width: 100%;
-//   color: white;
-//   font-size: 2.9rem;
-//   padding: 1.4rem;
-//   mix-blend-mode: hard-light;
-//   user-select: none;
-// `
 const Nav = styled.nav`
   user-select: none;
   position: fixed;
@@ -98,11 +81,12 @@ const MobText = styled.div`
 `
 const Text = styled.div`
   text-align: center;
-  font-size: 4rem;
+  font-size: min(max(1rem, 4vw), 22px);
   max-width: 90rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   z-index: 2;
+  padding: 1rem;
   pointer-events: none;
 `
 const NavLink = styled(Link)`
@@ -171,14 +155,14 @@ export default class IndexPage extends Component {
     // )
 
     if (typeof window !== "undefined") {
-      this.setState({ width: window.innerWidth })
-      if (window.innerWidth <= 600) {
-        this.setState({ mode: "mobile" })
-        console.log("mobile")
-      } else {
+      // this.setState({ width: window.innerWidth })
+      // if (window.innerWidth <= 600) {
+      //   this.setState({ mode: "mobile" })
+      //   console.log("mobile")
+      // } else {
         this.setState({ mode: "desktop" })
         console.log("desktop")
-      }
+
     }
   }
 
@@ -186,41 +170,41 @@ export default class IndexPage extends Component {
     window.removeEventListener("resize", this.handleWindowSizeChange)
   }
 
-  handleWindowSizeChange = () => {
-    // console.log("pixel ratio", window.devicePixelRatio)
-    // console.log("state of screen", this.state.mode)
-    this.setState({ width: window.innerWidth })
-    // console.log("window width", this.state.width)
+  // handleWindowSizeChange = () => {
+  //   // console.log("pixel ratio", window.devicePixelRatio)
+  //   // console.log("state of screen", this.state.mode)
+  //   this.setState({ width: window.innerWidth })
+  //   // console.log("window width", this.state.width)
 
-    if (this.state.width <= 700) {
-      this.setState({ mode: "mobile" })
-      console.log(this.state.width)
-    } else {
-      this.setState({ mode: "desktop" })
-    }
-  }
+  //   if (this.state.width <= 700) {
+  //     this.setState({ mode: "mobile" })
+  //     console.log(this.state.width)
+  //   } else {
+  //     this.setState({ mode: "desktop" })
+  //   }
+  // }
 
-  renderDungeon = () => {
-    if (this.state.mode === "mobile") {
-      console.log("mobile!")
-      return (
-        <>
-          <Nav>
-            <StyledLink draggable="false" to="/dev">
-              Portfolio
-            </StyledLink>
-          </Nav>
+  // renderDungeon = () => {
+  //   if (this.state.mode === "mobile") {
+  //     console.log("mobile!")
+  //     return (
+  //       <>
+  //         <Nav>
+  //           <StyledLink draggable="false" to="/dev">
+  //             Portfolio
+  //           </StyledLink>
+  //         </Nav>
 
-          <MobTextWrapper>
-            <MobText>Hey, feel free to look around</MobText>
-          </MobTextWrapper>
-          <DungeonComponent draggable="false" />
-        </>
-      )
-    } else {
-      return null
-    }
-  }
+  //         <MobTextWrapper>
+  //           <MobText>Hey, feel free to look around</MobText>
+  //         </MobTextWrapper>
+  //         <DungeonComponent draggable="false" />
+  //       </>
+  //     )
+  //   } else {
+  //     return null
+  //   }
+  // }
 
   renderDesktop = () => {
     if (this.state.mode === "desktop") {
@@ -232,12 +216,18 @@ export default class IndexPage extends Component {
           <Container>
             <CanvasComponent />
             <Text>
-              <h1 ref={this.selector}>
+
                 <p id="text" />
-                Hey, Jurgis Here. I'm a{" "}
-                <NavLink to="/dev/">Web Developer</NavLink>who does Graphic
-                Design.
-              </h1>
+                Jurgis Lietunovas Biography: <br /> Born in 1991 in Vilnius
+                Lithuania, Studied in Copenhagen Business School in 2010,
+                dropped out in 2011, <br/><br/> Started studying at the Gerrit Rietveld
+                Academie in Amsterdam, happilly graduated in 2018 with BA in Graphic
+                Design. <br/><br/> Throughout education was interested in time based media
+                and moving image, therefore worked with video and web programming, as well as 3D and other types of digital technologies.
+<br/><br/>
+                Now works as a part time software developer and film maker.
+                {/* <NavLink to="/dev/">Web Developer</NavLink>who does Graphic */}
+
             </Text>
           </Container>
         </>
@@ -251,7 +241,7 @@ export default class IndexPage extends Component {
     return (
       <>
         {this.renderDesktop()}
-        {this.renderDungeon()}
+        {/* {this.renderDungeon()} */}
       </>
     )
   }

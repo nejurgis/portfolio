@@ -54,8 +54,7 @@ export default class CanvasComponent extends Component {
     this.state = {
       data: [],
       col: {
-        0.9: "orange",
-        0.1: "red",
+        0.9: "red",
         0.5: "blue",
         0.8: "cyan",
 
